@@ -1,5 +1,6 @@
+import { ViewStyle, TextStyle } from "react-native";
 import { Theme } from "./theme/theme";
-import { ClassName, Color, ColorName, ColorScale } from "./types";
+import { ClassName, Color, ColorName, ColorScale, Envs } from "./types";
 import {
   FlexMap,
   AlignSelfMap,
@@ -55,33 +56,57 @@ export const parse = (theme: Theme, className: ClassName) => {
   }
 };
 
-export const rntw = (theme: Theme, classNames: ClassName[]) => {
+// exclude symbol from color because of OpaqueColorValue as symbol causing
+// type errors for common react componnents, and isn't needed for typechecking
+export type Style = ViewStyle &
+  Omit<TextStyle, "color"> & { color?: Exclude<TextStyle["color"], symbol> };
+
+// without envs
+export type { Style as RNTWStyleSimple };
+
+// with envs, return type of rntw
+export type RNTWStyle = Style & Partial<Record<Envs, Style>>;
+
+export const rntw = (theme: Theme, classNames: ClassName[]): RNTWStyle => {
   const { mode } = theme;
   const isDark = mode === "dark";
 
-  const styles = { __dark: {} };
-  const activeStyles = { __dark: {} };
+  const styles = { __overrides: {} };
+  const envStyles = new Map<string, { __overrides: {} }>();
 
   classNames.forEach((className) => {
     const parts = className.split(":");
     const fnarg = parts.pop() as ClassName;
-    const envs = parts;
+    const envs = new Set(parts);
 
-    let target = styles;
-    if (envs.includes("active")) {
-      target = activeStyles;
-    }
+    const isEnvDark = envs.delete("dark");
 
-    if (envs.includes("dark")) {
-      if (isDark) Object.assign(target.__dark, parse(theme, fnarg));
+    envs.forEach((env) => {
+      const styles = envStyles.get(env) || { __overrides: {} };
+
+      if (isDark && isEnvDark) {
+        Object.assign(styles.__overrides, parse(theme, fnarg));
+      } else {
+        Object.assign(styles, parse(theme, fnarg));
+      }
+
+      envStyles.set(env, styles);
+    });
+
+    if (isDark && isEnvDark) {
+      Object.assign(styles.__overrides, parse(theme, fnarg));
     } else {
-      Object.assign(target, parse(theme, fnarg));
+      Object.assign(styles, parse(theme, fnarg));
     }
   });
 
-  return {
-    ...styles,
-    ...styles.__dark,
-    active: { ...activeStyles, ...activeStyles.__dark },
-  };
+  const { __overrides, ...__styles } = styles;
+
+  const __envs = {};
+  envStyles.forEach((styles, env) => {
+    const { __overrides, ...__styles } = styles;
+    Object.assign(__envs, { [env]: Object.assign(__styles, __overrides) });
+  });
+
+  return Object.assign(__styles, __overrides, __envs);
 };

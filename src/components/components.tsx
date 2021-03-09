@@ -1,6 +1,7 @@
 import React from "react";
 import * as RN from "react-native";
 import { ClassName } from "../types";
+import { RNTWStyle } from "../rntw";
 import { useRNTW } from "../hooks/use-rntw";
 
 type WithRNTWProps<P> = P & { className?: ClassName | ClassName[] };
@@ -23,13 +24,13 @@ export function Pressable(
       children?:
         | React.ReactNode
         | ((
-            style: any,
+            style: RNTWStyle,
             props: RN.PressableStateCallbackType
           ) => React.ReactNode);
       style?:
         | RN.StyleProp<RN.ViewStyle>
         | ((
-            style: any,
+            style: RNTWStyle,
             state: RN.PressableStateCallbackType
           ) => RN.StyleProp<RN.ViewStyle>);
     }

@@ -59,7 +59,14 @@ export type RootClassName =
   | FontSize
   | TextColor
   | BackgroundColor;
-export type ActiveClassName = `active:${RootClassName}`;
+
+export interface Config {}
+
+export type DefaultEnvs = "active";
+export type UserEnvs = "Envs" extends keyof Config ? Config["Envs"] : never;
+export type Envs = DefaultEnvs | UserEnvs;
+
+export type ActiveClassName = `${Envs}:${RootClassName}`;
 
 export type AllClassName = RootClassName | ActiveClassName;
 export type DarkClassName = `dark:${AllClassName}`;
