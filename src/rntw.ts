@@ -1,5 +1,5 @@
-import { Theme } from "./theme";
-import { ClassName, Color, ColorName, ColorScale } from "./styles";
+import { Theme } from "./theme/theme";
+import { ClassName, Color, ColorName, ColorScale } from "./types";
 import {
   FlexMap,
   AlignSelfMap,

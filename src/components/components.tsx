@@ -1,7 +1,7 @@
 import React from "react";
 import * as RN from "react-native";
-import { ClassName } from "./styles";
-import { useRNTW } from "./use-rntw";
+import { ClassName } from "../types";
+import { useRNTW } from "../hooks/use-rntw";
 
 type WithRNTWProps<P> = P & { className?: ClassName | ClassName[] };
 

@@ -1,5 +1,5 @@
-import { rntw } from "./rntw";
-import { ClassName } from "./styles";
+import { rntw } from "../rntw";
+import { ClassName } from "../types";
 import { useTheme } from "./use-theme";
 
 export function useRNTW(

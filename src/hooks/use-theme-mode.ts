@@ -1,5 +1,5 @@
 import { useColorScheme } from "react-native";
-import { ThemeMode } from "./theme";
+import { ThemeMode } from "../theme/theme";
 
 /**
  * based on system appearance, will return `light` or `dark` for rntw.

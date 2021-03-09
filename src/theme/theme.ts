@@ -1,5 +1,5 @@
-import { ColorName, ColorScale } from "./styles";
-import { colors } from "./colors";
+import { ColorName, ColorScale } from "../types";
+import { colors } from "../colors";
 
 type Mode = "light" | "dark";
 
