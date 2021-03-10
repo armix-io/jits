@@ -62,11 +62,11 @@ export type RootClassName =
 
 export interface Config {}
 
-export type DefaultEnvs = "active";
-export type UserEnvs = "Envs" extends keyof Config ? Config["Envs"] : never;
-export type Envs = DefaultEnvs | UserEnvs;
+export type DefaultVariants = "active" | "focus" | "disabled" | "checked";
+export type CustomVariants = "Variants" extends keyof Config ? Config["Variants"] : never;
+export type Variants = DefaultVariants | CustomVariants;
 
-export type ActiveClassName = `${Envs}:${RootClassName}`;
+export type ActiveClassName = `${Variants}:${RootClassName}`;
 
 export type AllClassName = RootClassName | ActiveClassName;
 export type DarkClassName = `dark:${AllClassName}`;

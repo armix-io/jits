@@ -1,6 +1,6 @@
 import { ViewStyle, TextStyle } from "react-native";
 import { Theme } from "./theme/theme";
-import { ClassName, Color, ColorName, ColorScale, Envs } from "./types";
+import { ClassName, Color, ColorName, ColorScale, Variants } from "./types";
 import {
   FlexMap,
   AlignSelfMap,
@@ -61,39 +61,39 @@ export const parse = (theme: Theme, className: ClassName) => {
 export type Style = ViewStyle &
   Omit<TextStyle, "color"> & { color?: Exclude<TextStyle["color"], symbol> };
 
-// without envs
+// without variants
 export type { Style as RNTWStyleSimple };
 
-// with envs, return type of rntw
-export type RNTWStyle = Style & Partial<Record<Envs, Style>>;
+// with variants, return type of rntw
+export type RNTWStyle = Style & Partial<Record<Variants, Style>>;
 
 export const rntw = (theme: Theme, classNames: ClassName[]): RNTWStyle => {
   const { mode } = theme;
   const isDark = mode === "dark";
 
   const styles = { __overrides: {} };
-  const envStyles = new Map<string, { __overrides: {} }>();
+  const varaintStyles = new Map<string, { __overrides: {} }>();
 
   classNames.forEach((className) => {
     const parts = className.split(":");
     const fnarg = parts.pop() as ClassName;
-    const envs = new Set(parts);
+    const variants = new Set(parts);
 
-    const isEnvDark = envs.delete("dark");
+    const inVariantDark = variants.delete("dark");
 
-    envs.forEach((env) => {
-      const styles = envStyles.get(env) || { __overrides: {} };
+    variants.forEach((variant) => {
+      const styles = varaintStyles.get(variant) || { __overrides: {} };
 
-      if (isDark && isEnvDark) {
+      if (isDark && inVariantDark) {
         Object.assign(styles.__overrides, parse(theme, fnarg));
       } else {
         Object.assign(styles, parse(theme, fnarg));
       }
 
-      envStyles.set(env, styles);
+      varaintStyles.set(variant, styles);
     });
 
-    if (isDark && isEnvDark) {
+    if (isDark && inVariantDark) {
       Object.assign(styles.__overrides, parse(theme, fnarg));
     } else {
       Object.assign(styles, parse(theme, fnarg));
@@ -102,11 +102,13 @@ export const rntw = (theme: Theme, classNames: ClassName[]): RNTWStyle => {
 
   const { __overrides, ...__styles } = styles;
 
-  const __envs = {};
-  envStyles.forEach((styles, env) => {
+  const __variants = {};
+  varaintStyles.forEach((styles, variant) => {
     const { __overrides, ...__styles } = styles;
-    Object.assign(__envs, { [env]: Object.assign(__styles, __overrides) });
+    Object.assign(__variants, {
+      [variant]: Object.assign(__styles, __overrides),
+    });
   });
 
-  return Object.assign(__styles, __overrides, __envs);
+  return Object.assign(__styles, __overrides, __variants);
 };
