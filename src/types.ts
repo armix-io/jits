@@ -63,7 +63,9 @@ export type RootClassName =
 export interface Config {}
 
 export type DefaultVariants = "active" | "focus" | "disabled" | "checked";
-export type CustomVariants = "Variants" extends keyof Config ? Config["Variants"] : never;
+export type CustomVariants = "Variants" extends keyof Config
+  ? Config["Variants"]
+  : never;
 export type Variants = DefaultVariants | CustomVariants;
 
 export type ActiveClassName = `${Variants}:${RootClassName}`;

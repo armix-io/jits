@@ -1,1 +1,3 @@
-export * from "./components";
+export * from "./view";
+export * from "./text";
+export * from "./pressable";

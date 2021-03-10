@@ -58,14 +58,16 @@ export const parse = (theme: Theme, className: ClassName) => {
 
 // exclude symbol from color because of OpaqueColorValue as symbol causing
 // type errors for common react componnents, and isn't needed for typechecking
-export type Style = ViewStyle &
+export type StyleNode = ViewStyle &
   Omit<TextStyle, "color"> & { color?: Exclude<TextStyle["color"], symbol> };
 
 // without variants
-export type { Style as RNTWStyleSimple };
+export type { StyleNode as RNTWStyleNode };
 
 // with variants, return type of rntw
-export type RNTWStyle = Style & Partial<Record<Variants, Style>>;
+export type RNTWStyle = StyleNode & Partial<Record<Variants, StyleNode>>;
+
+export type WithRNTWProps<P> = P & { className?: ClassName | ClassName[] };
 
 export const rntw = (theme: Theme, classNames: ClassName[]): RNTWStyle => {
   const { mode } = theme;
