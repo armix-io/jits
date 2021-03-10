@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import * as RN from "react-native";
 import { ClassName } from "../types";
 import { RNTWStyle } from "../rntw";
