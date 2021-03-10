@@ -7,6 +7,7 @@ import {
   AlignItemsMap,
   AlignContentMap,
   JustifyContentMap,
+  OpacityMap,
   FontSizeMap,
 } from "./maps";
 
@@ -35,22 +36,36 @@ export const parse = (theme: Theme, className: ClassName) => {
     if (!args.length) return { display: "flex" };
     return FlexMap[arg as keyof typeof FlexMap] || { flex: parseInt(args[0]) };
   } else if (fn === "align") {
-    return AlignSelfMap[arg as keyof typeof AlignSelfMap];
+    const alignSelf = AlignSelfMap[arg as keyof typeof AlignSelfMap] as
+      | string
+      | undefined;
+    return alignSelf && { alignSelf };
   } else if (fn === "items") {
-    return AlignItemsMap[arg as keyof typeof AlignItemsMap];
+    const alignItems = AlignItemsMap[arg as keyof typeof AlignItemsMap] as
+      | string
+      | undefined;
+    return alignItems && { alignItems };
   } else if (fn === "content") {
-    return AlignContentMap[arg as keyof typeof AlignContentMap];
+    const alignContent = AlignContentMap[arg as keyof typeof AlignContentMap];
+    return alignContent && { alignContent };
   } else if (fn === "justify") {
-    return JustifyContentMap[arg as keyof typeof JustifyContentMap];
+    const justifyContent = JustifyContentMap[
+      arg as keyof typeof JustifyContentMap
+    ] as string | undefined;
+    return justifyContent && { justifyContent };
+  } else if (fn === "opacity") {
+    const opacity = OpacityMap[parseInt(arg) as keyof typeof OpacityMap] as
+      | number
+      | undefined;
+    return opacity && { opacity };
   } else if (fn === "text") {
-    return (
-      FontSizeMap[arg as keyof typeof FontSizeMap] || {
-        color: getColor(theme, arg as Color),
-      }
-    );
+    const fontSize = FontSizeMap[arg as keyof typeof FontSizeMap];
+    if (fontSize) return { fontSize };
+    const color = getColor(theme, arg as Color);
+    return color && { color };
   } else if (fn === "bg") {
     const backgroundColor = getColor(theme, arg as Color);
-    return { backgroundColor };
+    return backgroundColor && { backgroundColor };
   } else {
     console.warn(`[rntw.parse] className '${className}' is not implemented`);
   }

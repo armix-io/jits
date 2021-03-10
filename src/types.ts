@@ -5,9 +5,8 @@ import {
   AlignContentMap,
   JustifyContentMap,
   FontSizeMap,
+  OpacityMap,
 } from "./maps";
-
-export type Increments = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 
 export type ColorName =
   | "transparent"
@@ -43,12 +42,13 @@ export type Color =
 export type TextColor = `text-${Color}`;
 export type BackgroundColor = `bg-${Color}`;
 
-export type Flex = "flex" | `flex-${Increments | keyof typeof FlexMap}`;
+export type Flex = "flex" | `flex-${1 | 2 | 3 | 4 | 5 | keyof typeof FlexMap}`;
 export type AlignSelf = `self-${keyof typeof AlignSelfMap}`;
 export type AlignItems = `items-${keyof typeof AlignItemsMap}`;
 export type AlignContent = `content-${keyof typeof AlignContentMap}`;
 export type JustifyContent = `justify-${keyof typeof JustifyContentMap}`;
 export type FontSize = `text-${keyof typeof FontSizeMap}`;
+export type Opacity = `opacity-${keyof typeof OpacityMap}`;
 
 export type RootClassName =
   | Flex
@@ -57,6 +57,7 @@ export type RootClassName =
   | AlignContent
   | JustifyContent
   | FontSize
+  | Opacity
   | TextColor
   | BackgroundColor;
 

@@ -18,50 +18,50 @@ export const FlexMap = {
 };
 
 export const AlignSelfMap = {
-  auto: { alignSelf: "auto" },
-  center: { alignSelf: "center" },
-  end: { alignSelf: "flex-end" },
-  start: { alignSelf: "flex-start" },
-  stretch: { alignSelf: "stretch" },
+  auto: "auto",
+  center: "center",
+  end: "flex-end",
+  start: "flex-start",
+  stretch: "stretch",
 };
 
 export const AlignItemsMap = {
-  baseline: { alignItems: "baseline" },
-  center: { alignItems: "center" },
-  end: { alignItems: "flex-end" },
-  start: { alignItems: "flex-start" },
-  stretch: { alignItems: "stretch" },
+  baseline: "baseline",
+  center: "center",
+  end: "flex-end",
+  start: "flex-start",
+  stretch: "stretch",
 };
 
 export const AlignContentMap = {
-  around: { alignContent: "space-around" },
-  between: { alignContent: "space-between" },
-  center: { alignContent: "center" },
-  end: { alignContent: "flex-end" },
-  start: { alignContent: "flex-start" },
-  stretch: { alignContent: "stretch" },
+  around: "space-around",
+  between: "space-between",
+  center: "center",
+  end: "flex-end",
+  start: "flex-start",
+  stretch: "stretch",
 };
 
 export const JustifyContentMap = {
-  around: { justifyContent: "space-around" },
-  between: { justifyContent: "space-between" },
-  center: { justifyContent: "center" },
-  end: { justifyContent: "flex-end" },
-  evenly: { justifyContent: "space-evenly" },
-  start: { justifyContent: "flex-start" },
+  around: "space-around",
+  between: "space-between",
+  center: "center",
+  end: "flex-end",
+  evenly: "space-evenly",
+  start: "flex-start",
 };
 
 export const FontSizeMap = {
-  "2xl": { fontSize: rem(1.5) },
-  "3xl": { fontSize: rem(1.875) },
-  "4xl": { fontSize: rem(2.25) },
-  "5xl": { fontSize: rem(3) },
-  "6xl": { fontSize: rem(4) },
-  base: { fontSize: rem(1) },
-  lg: { fontSize: rem(1.125) },
-  sm: { fontSize: rem(0.875) },
-  xl: { fontSize: rem(1.25) },
-  xs: { fontSize: rem(0.75) },
+  "2xl": rem(1.5),
+  "3xl": rem(1.875),
+  "4xl": rem(2.25),
+  "5xl": rem(3),
+  "6xl": rem(4),
+  base: rem(1),
+  lg: rem(1.125),
+  sm: rem(0.875),
+  xl: rem(1.25),
+  xs: rem(0.75),
 };
 
 export const OpacityMap = {

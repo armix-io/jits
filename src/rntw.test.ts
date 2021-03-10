@@ -1,7 +1,7 @@
 import { defaultTheme } from "./theme";
 import { rntw } from "./rntw";
 import { ClassName } from "./types";
-import { FontSizeMap } from "./maps";
+import { FontSizeMap, OpacityMap } from "./maps";
 
 const classNames: ClassName[] = [
   "text-blue-600",
@@ -15,6 +15,8 @@ const classNames: ClassName[] = [
   "justify-center",
   "text-3xl",
   "dark:text-5xl",
+  "active:opacity-50",
+  "dark:active:opacity-25",
 ];
 
 test("create correct style", () => {
@@ -26,11 +28,13 @@ test("create correct style", () => {
   expect(styles.flexDirection).toBe("row");
   expect(styles.alignItems).toBe("center");
   expect(styles.justifyContent).toBe("center");
-  expect(styles.fontSize).toBe(FontSizeMap["3xl"].fontSize);
+  expect(styles.fontSize).toBe(FontSizeMap["3xl"]);
+  expect(styles.opacity).toBe(undefined);
 
   expect(styles.active).toMatchObject({
     color: defaultTheme.colors.blue[200],
     backgroundColor: defaultTheme.colors.gray[100],
+    opacity: OpacityMap[50],
   });
   expect(styles.disabled).toMatchObject({
     backgroundColor: defaultTheme.colors.black,
@@ -46,11 +50,13 @@ test("create correct dark style", () => {
   expect(styles.flexDirection).toBe("row");
   expect(styles.alignItems).toBe("center");
   expect(styles.justifyContent).toBe("center");
-  expect(styles.fontSize).toBe(FontSizeMap["5xl"].fontSize);
+  expect(styles.fontSize).toBe(FontSizeMap["5xl"]);
+  expect(styles.opacity).toBe(undefined);
 
   expect(styles.active).toMatchObject({
     color: defaultTheme.colors.blue[200],
     backgroundColor: defaultTheme.colors.gray[900],
+    opacity: OpacityMap[25],
   });
   expect(styles.disabled).toMatchObject({
     backgroundColor: defaultTheme.colors.black,

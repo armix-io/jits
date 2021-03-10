@@ -35,16 +35,16 @@ export function Pressable(
   return (
     <RN.Pressable
       {...forward}
-      style={(state) => {
-        return Object.assign(
+      style={(state) =>
+        Object.assign(
           {},
           autoStyle ? rntwStyle : undefined,
           autoStyle && state.pressed ? stateMergeProps.active : undefined,
           typeof propStyle === "function"
             ? propStyle({ ...state, ...stateMergeProps })
             : propStyle
-        );
-      }}
+        )
+      }
     >
       {(state) =>
         typeof children === "function"
