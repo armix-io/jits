@@ -1,17 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "outDir": "lib",
+    "outDir": "out",
     "target": "esnext",
     "module": "commonjs",
     "strict": true,
     "declaration": true,
     "declarationMap": true,
-    "jsx": "react-native",
+    "jsx": "react",
     "skipLibCheck": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "moduleResolution": "Node",
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "exclude": ["src/**/*.test.*"],
+  "include": ["src/**/*"]
 }

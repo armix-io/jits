@@ -1,5 +1,5 @@
 import { ViewStyle, TextStyle } from "react-native";
-import { Theme } from "./theme/theme";
+import { Theme } from "./theme";
 import { ClassName, Color, ColorName, ColorScale, Variants } from "./types";
 import {
   FlexMap,
@@ -69,7 +69,7 @@ export type RNTWStyle = Style & Partial<Record<Variants, Style>>;
 
 export const rntw = (theme: Theme, classNames: ClassName[]): RNTWStyle => {
   const { mode } = theme;
-  const isDark = mode === "dark";
+  const isThemeDark = mode === "dark";
 
   const styles = { __overrides: {} };
   const varaintStyles = new Map<string, { __overrides: {} }>();
@@ -79,25 +79,30 @@ export const rntw = (theme: Theme, classNames: ClassName[]): RNTWStyle => {
     const fnarg = parts.pop() as ClassName;
     const variants = new Set(parts);
 
-    const inVariantDark = variants.delete("dark");
+    const isDarkVariant = variants.delete("dark");
+
+    // or || any other override variant
+    const isOverrideVariant = isDarkVariant;
+
+    // if no variants, add ROOT to use to map to root styles in forEach logic
+    if (!variants.size) variants.add("ROOT");
 
     variants.forEach((variant) => {
-      const styles = varaintStyles.get(variant) || { __overrides: {} };
+      const target =
+        variant === "ROOT"
+          ? styles
+          : varaintStyles.get(variant) || { __overrides: {} };
 
-      if (isDark && inVariantDark) {
-        Object.assign(styles.__overrides, parse(theme, fnarg));
+      if (isOverrideVariant) {
+        if (isDarkVariant && isThemeDark) {
+          Object.assign(target.__overrides, parse(theme, fnarg));
+        }
       } else {
-        Object.assign(styles, parse(theme, fnarg));
+        Object.assign(target, parse(theme, fnarg));
       }
 
-      varaintStyles.set(variant, styles);
+      if (variant !== "ROOT") varaintStyles.set(variant, target);
     });
-
-    if (isDark && inVariantDark) {
-      Object.assign(styles.__overrides, parse(theme, fnarg));
-    } else {
-      Object.assign(styles, parse(theme, fnarg));
-    }
   });
 
   const { __overrides, ...__styles } = styles;
