@@ -8,21 +8,23 @@ type PressableStateWithStyles = RN.PressableStateCallbackType & {
   active: RNTWStyleNode;
 };
 
-export function Pressable(
-  props: WithRNTWProps<
-    Omit<RN.PressableProps, "children" | "style"> & {
-      children?:
-        | React.ReactNode
-        | ((stateWithStyles: PressableStateWithStyles) => React.ReactNode);
-      style?:
-        | RN.StyleProp<RN.ViewStyle>
-        | ((
-            stateWithStyles: PressableStateWithStyles
-          ) => RN.StyleProp<RN.ViewStyle>);
-      autoStyle?: boolean;
-    }
-  >
-) {
+type Props = WithRNTWProps<
+  Omit<RN.PressableProps, "children" | "style"> & {
+    children?:
+      | React.ReactNode
+      | ((stateWithStyles: PressableStateWithStyles) => React.ReactNode);
+    style?:
+      | RN.StyleProp<RN.ViewStyle>
+      | ((
+          stateWithStyles: PressableStateWithStyles
+        ) => RN.StyleProp<RN.ViewStyle>);
+    autoStyle?: boolean;
+  }
+>;
+
+export type { Props as PressableProps };
+
+export function Pressable(props: Props) {
   const {
     className,
     children,

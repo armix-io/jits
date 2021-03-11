@@ -82,7 +82,7 @@ export type { StyleNode as RNTWStyleNode };
 // with variants, return type of rntw
 export type RNTWStyle = StyleNode & Partial<Record<Variants, StyleNode>>;
 
-export type WithRNTWProps<P> = P & { className?: ClassName | ClassName[] };
+export type WithRNTWProps<P> = P & { className?: ClassName[] };
 
 export const rntw = (theme: Theme, classNames: ClassName[]): RNTWStyle => {
   const { mode } = theme;
