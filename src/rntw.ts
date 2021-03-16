@@ -19,8 +19,8 @@ import {
   OpacityMap,
   FontSizeMap,
   BorderRadiusMap,
-  BorderStyleMap,
   BorderWidthMap,
+  SpacingMap,
 } from "./maps";
 import { getProps } from "./parse";
 
@@ -46,15 +46,15 @@ export const parse = (
   theme: Theme,
   className: ClassName
 ): Partial<ViewStyle & TextStyle> | undefined => {
-  const args = className.split("-");
-
-  const props = getProps(args);
-  if (!props) {
-    // console.warn(`[rntw.parse] className '${className}' is not implemented`);
-    // TODO: add return after implementing all other special words
-  }
-
-  if (props?.op === "border") {
+  const { op, ...props } = getProps(className);
+  if (op === "m" || op === "p") {
+    const { scale, target } = props;
+    return {
+      [`${op === "m" ? "margin" : "padding"}${
+        getTarget(target) || ""
+      }`]: SpacingMap[parseInt(scale!) as keyof typeof SpacingMap],
+    };
+  } else if (op === "border") {
     const { color, style, scale, target } = props;
     if (color) {
       return {
@@ -69,6 +69,8 @@ export const parse = (
       BorderWidthMap.DEFAULT;
     return { [`border${getTarget(target) || ""}Width`]: width };
   }
+
+  const args = className.split("-");
 
   const a0 = args.shift();
   if (a0 === "flex") {

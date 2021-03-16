@@ -6,6 +6,7 @@ import {
   BorderWidthMap,
   FontSizeMap,
   OpacityMap,
+  SpacingMap,
 } from "./maps";
 
 const classNames: ClassName[] = [
@@ -85,5 +86,25 @@ test("border styles are correct", () => {
     borderColor: defaultTheme.colors.red[600],
     borderBottomColor: defaultTheme.colors.blue[600],
     borderStyle: "dotted",
+  });
+});
+
+test("margin styles are correct", () => {
+  const styles = rntw(defaultTheme, [
+    "p-2",
+    "px-4",
+    "pb-10",
+    "m-1",
+    "mb-12",
+    "my-2",
+  ]);
+
+  expect(styles).toMatchObject({
+    padding: SpacingMap["2"],
+    paddingHorizontal: SpacingMap["4"],
+    paddingBottom: SpacingMap["10"],
+    margin: SpacingMap["1"],
+    marginBottom: SpacingMap["12"],
+    marginVertical: SpacingMap["2"],
   });
 });

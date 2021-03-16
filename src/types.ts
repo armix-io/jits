@@ -9,6 +9,7 @@ import {
   BorderRadiusMap,
   BorderWidthMap,
   BorderStyleMap,
+  SpacingMap,
 } from "./maps";
 
 export enum Target {
@@ -20,6 +21,8 @@ export enum Target {
   tl = "TopLeft",
   br = "BottomRight",
   bl = "BottomLeft",
+  x = "Horizontal",
+  y = "Vertical",
 }
 
 export type ColorName =
@@ -56,6 +59,12 @@ export type Color =
 export type TextColor = `text-${Color}`;
 export type BackgroundColor = `bg-${Color}`;
 
+export type Axis = "x" | "y";
+// TODO: add "s"|"e" for "start" and "end" borders
+export type Side = "t" | "r" | "b" | "l";
+// TODO: add "ts"|"bs"|"te"|"be" for top/bottom-start/end corners
+export type Corner = "tr" | "tl" | "br" | "bl";
+
 export type Flex = "flex" | `flex-${1 | 2 | 3 | 4 | 5 | keyof typeof FlexMap}`;
 export type AlignSelf = `self-${keyof typeof AlignSelfMap}`;
 export type AlignItems = `items-${keyof typeof AlignItemsMap}`;
@@ -63,13 +72,16 @@ export type AlignContent = `content-${keyof typeof AlignContentMap}`;
 export type JustifyContent = `justify-${keyof typeof JustifyContentMap}`;
 export type FontSize = `text-${keyof typeof FontSizeMap}`;
 export type Opacity = `opacity-${keyof typeof OpacityMap}`;
+export type MarginClass = `${"" | "-"}m${
+  | ""
+  | Axis
+  | Side}-${keyof typeof SpacingMap}`;
+export type PaddingClass = `${"" | "-"}p${
+  | ""
+  | Axis
+  | Side}-${keyof typeof SpacingMap}`;
 
 type WithoutDefault<T> = Exclude<T, "DEFAULT">;
-
-// TODO: add "s"|"e" for "start" and "end" borders
-export type Side = "t" | "r" | "b" | "l";
-// TODO: add "ts"|"bs"|"te"|"be" for top/bottom-start/end corners
-export type Corner = "tr" | "tl" | "br" | "bl";
 
 export type BorderRadius = `rounded${
   | ""
@@ -92,10 +104,8 @@ export type Borders =
   | BorderRadius
   | BorderWidth
   | BorderColor
-  // | BorderOpacity
+  | BorderOpacity
   | BorderStyleClass;
-
-// const a: BorderOpacity = ""
 
 export type RootClassName =
   | Flex
@@ -107,7 +117,9 @@ export type RootClassName =
   | Opacity
   | TextColor
   | BackgroundColor
-  | Borders;
+  | Borders
+  | MarginClass
+  | PaddingClass;
 
 export interface Config {}
 
