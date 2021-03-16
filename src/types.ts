@@ -6,7 +6,21 @@ import {
   JustifyContentMap,
   FontSizeMap,
   OpacityMap,
+  BorderRadiusMap,
+  BorderWidthMap,
+  BorderStyleMap,
 } from "./maps";
+
+export enum Target {
+  t = "Top",
+  r = "Right",
+  b = "Bottom",
+  l = "Left",
+  tr = "TopRight",
+  tl = "TopLeft",
+  br = "BottomRight",
+  bl = "BottomLeft",
+}
 
 export type ColorName =
   | "transparent"
@@ -50,6 +64,39 @@ export type JustifyContent = `justify-${keyof typeof JustifyContentMap}`;
 export type FontSize = `text-${keyof typeof FontSizeMap}`;
 export type Opacity = `opacity-${keyof typeof OpacityMap}`;
 
+type WithoutDefault<T> = Exclude<T, "DEFAULT">;
+
+// TODO: add "s"|"e" for "start" and "end" borders
+export type Side = "t" | "r" | "b" | "l";
+// TODO: add "ts"|"bs"|"te"|"be" for top/bottom-start/end corners
+export type Corner = "tr" | "tl" | "br" | "bl";
+
+export type BorderRadius = `rounded${
+  | ""
+  | `${"" | `-${Side | Corner}`}${
+      | ""
+      | `-${WithoutDefault<keyof typeof BorderRadiusMap>}`}`}`;
+export type BorderWidth = `border${
+  | ""
+  | `${"" | `-${Side}`}${
+      | ""
+      | `-${WithoutDefault<keyof typeof BorderWidthMap>}`}`}`;
+export type BorderColor = `border-${Color | `${Side}-${Color}`}`;
+// TODO: opacity must convert border-color to rbga and set alpha using opacity
+export type BorderOpacity = `border-opacity-${keyof typeof OpacityMap}`;
+
+export type BorderStyle = keyof typeof BorderStyleMap;
+export type BorderStyleClass = `border-${keyof typeof BorderStyleMap}`;
+
+export type Borders =
+  | BorderRadius
+  | BorderWidth
+  | BorderColor
+  // | BorderOpacity
+  | BorderStyleClass;
+
+// const a: BorderOpacity = ""
+
 export type RootClassName =
   | Flex
   | AlignSelf
@@ -59,7 +106,8 @@ export type RootClassName =
   | FontSize
   | Opacity
   | TextColor
-  | BackgroundColor;
+  | BackgroundColor
+  | Borders;
 
 export interface Config {}
 

@@ -15,7 +15,7 @@ export const FlexMap = {
   wrap: { flexWrap: "wrap" },
   "wrap-reverse": { flexWrap: "wrap-reverse" },
   nowrap: { flexWrap: "nowrap" },
-};
+} as const;
 
 export const AlignSelfMap = {
   auto: "auto",
@@ -23,7 +23,7 @@ export const AlignSelfMap = {
   end: "flex-end",
   start: "flex-start",
   stretch: "stretch",
-};
+} as const;
 
 export const AlignItemsMap = {
   baseline: "baseline",
@@ -31,7 +31,7 @@ export const AlignItemsMap = {
   end: "flex-end",
   start: "flex-start",
   stretch: "stretch",
-};
+} as const;
 
 export const AlignContentMap = {
   around: "space-around",
@@ -40,7 +40,7 @@ export const AlignContentMap = {
   end: "flex-end",
   start: "flex-start",
   stretch: "stretch",
-};
+} as const;
 
 export const JustifyContentMap = {
   around: "space-around",
@@ -49,7 +49,7 @@ export const JustifyContentMap = {
   end: "flex-end",
   evenly: "space-evenly",
   start: "flex-start",
-};
+} as const;
 
 export const FontSizeMap = {
   "2xl": rem(1.5),
@@ -66,9 +66,19 @@ export const FontSizeMap = {
 
 export const OpacityMap = {
   0: 0,
+  5: 0.05,
+  10: 0.1,
+  20: 0.2,
   25: 0.25,
+  30: 0.3,
+  40: 0.4,
   50: 0.5,
+  60: 0.6,
+  70: 0.7,
   75: 0.75,
+  80: 0.8,
+  90: 0.9,
+  95: 0.95,
   100: 1,
 };
 
@@ -91,4 +101,30 @@ export const SpacingMap = {
   48: rem(12),
   56: rem(14),
   64: rem(16),
+};
+
+export const BorderRadiusMap = {
+  none: 0,
+  sm: rem(0.125),
+  DEFAULT: rem(0.25),
+  md: rem(0.375),
+  lg: rem(0.5),
+  xl: rem(0.75),
+  "2xl": rem(1),
+  "3xl": rem(1.5),
+  full: 9999,
+};
+
+export const BorderWidthMap = {
+  DEFAULT: 1,
+  "0": 0,
+  "2": 2,
+  "4": 4,
+  "8": 8,
+};
+
+export const BorderStyleMap = {
+  solid: "solid",
+  dotted: "dotted",
+  dashed: "dashed",
 };

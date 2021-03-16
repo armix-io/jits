@@ -1,7 +1,12 @@
 import { defaultTheme } from "./theme";
 import { rntw } from "./rntw";
 import { ClassName } from "./types";
-import { FontSizeMap, OpacityMap } from "./maps";
+import {
+  BorderRadiusMap,
+  BorderWidthMap,
+  FontSizeMap,
+  OpacityMap,
+} from "./maps";
 
 const classNames: ClassName[] = [
   "text-blue-600",
@@ -60,5 +65,25 @@ test("create correct dark style", () => {
   });
   expect(styles.disabled).toMatchObject({
     backgroundColor: defaultTheme.colors.black,
+  });
+});
+
+test("border styles are correct", () => {
+  const styles = rntw(defaultTheme, [
+    "border",
+    "rounded",
+    "rounded-tr-2xl",
+    "border-red-600",
+    "border-b-blue-600",
+    "border-dotted",
+  ]);
+
+  expect(styles).toMatchObject({
+    borderWidth: BorderWidthMap["DEFAULT"],
+    borderRadius: BorderRadiusMap["DEFAULT"],
+    borderTopRightRadius: BorderRadiusMap["2xl"],
+    borderColor: defaultTheme.colors.red[600],
+    borderBottomColor: defaultTheme.colors.blue[600],
+    borderStyle: "dotted",
   });
 });

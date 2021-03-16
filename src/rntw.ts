@@ -1,6 +1,15 @@
 import { ViewStyle, TextStyle } from "react-native";
 import { Theme } from "./theme";
-import { ClassName, Color, ColorName, ColorScale, Variants } from "./types";
+import {
+  ClassName,
+  Color,
+  ColorName,
+  ColorScale,
+  Variants,
+  Side,
+  Corner,
+  Target,
+} from "./types";
 import {
   FlexMap,
   AlignSelfMap,
@@ -9,15 +18,19 @@ import {
   JustifyContentMap,
   OpacityMap,
   FontSizeMap,
+  BorderRadiusMap,
+  BorderStyleMap,
+  BorderWidthMap,
 } from "./maps";
+import { getProps } from "./parse";
 
 export const getColor = (theme: Theme, color: Color) => {
   if (color === "transparent") {
-    return theme.colors.transparent;
+    return theme.colors.transparent as string;
   } else if (color === "black") {
-    return theme.colors.black;
+    return theme.colors.black as string;
   } else if (color === "white") {
-    return theme.colors.white;
+    return theme.colors.white as string;
   } else {
     const args = color.split("-");
     const name = args[0] as ColorName;
@@ -26,46 +39,155 @@ export const getColor = (theme: Theme, color: Color) => {
   }
 };
 
-export const parse = (theme: Theme, className: ClassName) => {
-  const parts = className.split("-");
+const getTarget = (target: string | undefined) =>
+  target && Target[target as keyof typeof Target];
 
-  const [fn, ...args] = parts;
-  const arg = args.join("-");
+export const parse = (
+  theme: Theme,
+  className: ClassName
+): Partial<ViewStyle & TextStyle> | undefined => {
+  const args = className.split("-");
 
-  if (fn === "flex") {
-    if (!args.length) return { display: "flex" };
-    return FlexMap[arg as keyof typeof FlexMap] || { flex: parseInt(args[0]) };
-  } else if (fn === "align") {
-    const alignSelf = AlignSelfMap[arg as keyof typeof AlignSelfMap] as
-      | string
-      | undefined;
-    return alignSelf && { alignSelf };
-  } else if (fn === "items") {
-    const alignItems = AlignItemsMap[arg as keyof typeof AlignItemsMap] as
-      | string
-      | undefined;
-    return alignItems && { alignItems };
-  } else if (fn === "content") {
-    const alignContent = AlignContentMap[arg as keyof typeof AlignContentMap];
+  const props = getProps(args);
+  if (!props) {
+    // console.warn(`[rntw.parse] className '${className}' is not implemented`);
+    // TODO: add return after implementing all other special words
+  }
+
+  if (props?.op === "border") {
+    const { color, style, scale, target } = props;
+    if (color) {
+      return {
+        [`border${getTarget(target) || ""}Color`]: getColor(theme, color),
+      };
+    }
+    if (style) {
+      return { borderStyle: style };
+    }
+    const width =
+      BorderWidthMap[scale as keyof typeof BorderWidthMap] ||
+      BorderWidthMap.DEFAULT;
+    return { [`border${getTarget(target) || ""}Width`]: width };
+  }
+
+  const a0 = args.shift();
+  if (a0 === "flex") {
+    const ax = args.join("-") as keyof typeof FlexMap;
+    if (!ax) return { display: "flex" };
+    return FlexMap[ax] || { flex: parseInt(ax) };
+  } else if (a0 === "align") {
+    const ax = args.join("-") as keyof typeof AlignSelfMap;
+    const alignSelf = AlignSelfMap[ax];
+    return (alignSelf && { alignSelf }) || undefined;
+  } else if (a0 === "items") {
+    const ax = args.join("-") as keyof typeof AlignItemsMap;
+    const alignItems = AlignItemsMap[ax];
+    return (alignItems && { alignItems }) || undefined;
+  } else if (a0 === "content") {
+    const ax = args.join("-") as keyof typeof AlignContentMap;
+    const alignContent = AlignContentMap[ax];
     return alignContent && { alignContent };
-  } else if (fn === "justify") {
-    const justifyContent = JustifyContentMap[
-      arg as keyof typeof JustifyContentMap
-    ] as string | undefined;
-    return justifyContent && { justifyContent };
-  } else if (fn === "opacity") {
-    const opacity = OpacityMap[parseInt(arg) as keyof typeof OpacityMap] as
-      | number
-      | undefined;
-    return opacity && { opacity };
-  } else if (fn === "text") {
-    const fontSize = FontSizeMap[arg as keyof typeof FontSizeMap];
+  } else if (a0 === "justify") {
+    const ax = args.join("-") as keyof typeof JustifyContentMap;
+    const justifyContent = JustifyContentMap[ax];
+    return (justifyContent && { justifyContent }) || undefined;
+  } else if (a0 === "opacity") {
+    const ax = parseInt(args.join("-")) as keyof typeof OpacityMap;
+    const opacity = OpacityMap[ax];
+    return (opacity && { opacity }) || undefined;
+  } else if (a0 === "text") {
+    const ax = args.join("-") as keyof typeof FontSizeMap;
+    const fontSize = FontSizeMap[ax];
     if (fontSize) return { fontSize };
-    const color = getColor(theme, arg as Color);
-    return color && { color };
-  } else if (fn === "bg") {
-    const backgroundColor = getColor(theme, arg as Color);
-    return backgroundColor && { backgroundColor };
+    const color = getColor(theme, ax as Color);
+    return (color && { color }) || undefined;
+  } else if (a0 === "bg") {
+    const ax = args.join("-") as Color;
+    const backgroundColor = getColor(theme, ax);
+    return (backgroundColor && { backgroundColor }) || undefined;
+    /**
+     * BORDER (radius)
+     */
+  } else if (a0 === "rounded") {
+    const [a1, a2] = args;
+    let size: number;
+    let corner: Corner | undefined = undefined;
+    if (a1 && a2) {
+      // rounded-{corner}-{size}
+      corner = a1 as Corner;
+      size = BorderRadiusMap[a2 as keyof typeof BorderRadiusMap];
+    } else if (a1) {
+      // rounded-{corner|size}
+      size = BorderRadiusMap[a1 as keyof typeof BorderRadiusMap];
+      // if size undefined, the argument is a corner using default size
+      if (!size) {
+        corner = a1 as Corner;
+        size = BorderRadiusMap.DEFAULT;
+      } else {
+        // size is the arg, all corners are the target
+      }
+    } else {
+      // rounded
+      // no args, all corners with default size
+      size = BorderRadiusMap.DEFAULT;
+    }
+
+    return !corner
+      ? { borderRadius: size }
+      : corner === "tr"
+      ? { borderTopRightRadius: size }
+      : corner === "tl"
+      ? { borderTopLeftRadius: size }
+      : corner === "br"
+      ? { borderBottomRightRadius: size }
+      : corner === "bl"
+      ? { borderBottomLeftRadius: size }
+      : undefined;
+    /**
+     * BORDER
+     */
+  } else if (a0 === "border") {
+    // const [a1, a2] = args;
+    // if (a1 === "opacity") {
+    //   console.warn(`[rntw.parse] className '${className}' is not implemented`);
+    //   return undefined;
+    // }
+    // // [(side|corner)?, scale?]
+    // const reBorderRadius = /^rounded(?:-(tr|tl|br|bl|t|r|b|l))?(?:-(none|sm|md|lg|xl|2xl|3xl|full))?/;
+    // // [side?, scale?]
+    // const reBorderWidth = /^border(?:-(t|r|b|l))?(?:-(0|2|4|8))?/;
+    // // [side?, color, scale?]
+    // const reBorderColor = /^border(?:-(t|r|b|l))?-(\w+)-(\d+)$/;
+    // // [side?, scale]
+    // const reBorderOpacity = /^border-opacity(?:-(t|r|b|l))?-(\d+)$/;
+    // if (Object.keys(BorderStyleMap).includes(a1)) {
+    //   const borderStyle = BorderStyleMap[
+    //     a1 as keyof typeof BorderStyleMap
+    //   ] as keyof typeof BorderStyleMap;
+    //   return { borderStyle };
+    // }
+    // let side: Side | undefined = ["t", "r", "b", "l"].includes(a1)
+    //   ? (a1 as Side)
+    //   : undefined;
+    // if (a1 && a2) {
+    //   // rounded-{side}-{size}
+    //   side = a1 as Side;
+    //   size = BorderWidthMap[a2 as keyof typeof BorderWidthMap];
+    // } else if (a1) {
+    //   // rounded-{side|size}
+    //   size = BorderWidthMap[a1 as keyof typeof BorderWidthMap];
+    //   // if size undefined, the argument is a side using default size
+    //   if (!size) {
+    //     side = a1 as Side;
+    //     size = BorderWidthMap.DEFAULT;
+    //   } else {
+    //     // size is the arg, all corners are the target
+    //   }
+    // } else {
+    //   // rounded
+    //   // no args, all sides with default size
+    //   size = BorderWidthMap.DEFAULT;
+    // }
   } else {
     console.warn(`[rntw.parse] className '${className}' is not implemented`);
   }
