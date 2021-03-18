@@ -1,58 +1,89 @@
 import * as React from "react";
 import * as RN from "react-native";
-import { RNTWStyle, RNTWStyleNode, WithRNTWProps } from "../rntw";
+import { StateVariant, Style } from "../types";
+import { RNTWNode, RNTWRoot, WithRNTWProps } from "../rntw";
 import { useRNTW } from "../hooks/use-rntw";
+import { getMergedVariant } from "../get-merged-variant";
 
-type PressableStateWithStyles = RN.PressableStateCallbackType & {
-  style: RNTWStyle;
-  active: RNTWStyleNode;
+type AutoVariant = StateVariant | "auto" | "none";
+
+const getVariant = (
+  variant:
+    | AutoVariant
+    | ((state: RN.PressableStateCallbackType) => AutoVariant),
+  state: RN.PressableStateCallbackType
+) => {
+  const _v = typeof variant === "function" ? variant(state) : variant;
+  const v =
+    _v === "none"
+      ? "none"
+      : _v === "auto"
+      ? state.pressed
+        ? "active"
+        : undefined
+      : _v;
+  return v;
 };
 
-type Props = WithRNTWProps<
-  Omit<RN.PressableProps, "children" | "style"> & {
-    children?:
-      | React.ReactNode
-      | ((stateWithStyles: PressableStateWithStyles) => React.ReactNode);
-    style?:
-      | RN.StyleProp<RN.ViewStyle>
-      | ((
-          stateWithStyles: PressableStateWithStyles
-        ) => RN.StyleProp<RN.ViewStyle>);
-    autoStyle?: boolean;
-  }
->;
+type Props = Omit<
+  WithRNTWProps<Omit<RN.PressableProps, "children" | "style">>,
+  "variant"
+> & {
+  variant?:
+    | AutoVariant
+    | ((state: RN.PressableStateCallbackType) => AutoVariant);
+  style?:
+    | RN.StyleProp<RN.ViewStyle>
+    | ((
+        ss: RN.PressableStateCallbackType & { style: Style; root: RNTWRoot }
+      ) => RN.StyleProp<RN.ViewStyle>);
+  children?:
+    | React.ReactNode
+    | ((
+        ss: RN.PressableStateCallbackType & RNTWNode & { root: RNTWRoot }
+      ) => React.ReactNode);
+};
 
 export type { Props as PressableProps };
 
 export function Pressable(props: Props) {
   const {
     className,
+    variant: _variant = "auto",
+    style: styleProp,
     children,
-    style: propStyle,
-    autoStyle = true,
     ...forward
   } = props;
-  const rntwStyle = useRNTW(className);
-  const stateMergeProps = { style: rntwStyle, active: rntwStyle.active || {} };
+  const rntw = useRNTW();
+  const root = rntw(className);
   return (
     <RN.Pressable
       {...forward}
-      style={(state) =>
-        Object.assign(
+      style={(state) => {
+        const variant = getVariant(_variant, state);
+        const node =
+          variant !== "none"
+            ? getMergedVariant(root, variant)
+            : ({} as RNTWNode);
+        return Object.assign(
           {},
-          autoStyle ? rntwStyle : undefined,
-          autoStyle && state.pressed ? stateMergeProps.active : undefined,
-          typeof propStyle === "function"
-            ? propStyle({ ...state, ...stateMergeProps })
-            : propStyle
-        )
-      }
+          node.view,
+          typeof styleProp === "function"
+            ? styleProp({ ...state, style: node.view, root })
+            : styleProp
+        );
+      }}
     >
-      {(state) =>
-        typeof children === "function"
-          ? children({ ...state, ...stateMergeProps })
-          : children
-      }
+      {(state) => {
+        const variant = getVariant(_variant, state);
+        const node =
+          variant !== "none"
+            ? getMergedVariant(root, variant)
+            : ({} as RNTWNode);
+        return typeof children === "function"
+          ? children({ ...state, ...node, root })
+          : children;
+      }}
     </RN.Pressable>
   );
 }

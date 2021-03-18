@@ -1,5 +1,5 @@
-import { defaultTheme } from "./theme";
 import { rntw } from "./rntw";
+import { defaultTheme } from "./theme";
 import { ClassName } from "./types";
 import {
   BorderRadiusMap,
@@ -26,51 +26,54 @@ const classNames: ClassName[] = [
 ];
 
 test("create correct style", () => {
-  const styles = rntw(defaultTheme, classNames);
+  const { style, active, disabled } = rntw(defaultTheme, classNames);
 
-  expect(styles.color).toBe(defaultTheme.colors.blue[600]);
-  expect(styles.backgroundColor).toBe(undefined);
+  expect(style.color).toBe(defaultTheme.colors.blue[600]);
+  expect(style.backgroundColor).toBe(undefined);
 
-  expect(styles.flexDirection).toBe("row");
-  expect(styles.alignItems).toBe("center");
-  expect(styles.justifyContent).toBe("center");
-  expect(styles.fontSize).toBe(FontSizeMap["3xl"]);
-  expect(styles.opacity).toBe(undefined);
+  expect(style.flexDirection).toBe("row");
+  expect(style.alignItems).toBe("center");
+  expect(style.justifyContent).toBe("center");
+  expect(style.fontSize).toBe(FontSizeMap["3xl"]);
+  expect(style.opacity).toBe(undefined);
 
-  expect(styles.active).toMatchObject({
+  expect(active.style).toMatchObject({
     color: defaultTheme.colors.blue[200],
     backgroundColor: defaultTheme.colors.gray[100],
     opacity: OpacityMap[50],
   });
-  expect(styles.disabled).toMatchObject({
+  expect(disabled.style).toMatchObject({
     backgroundColor: defaultTheme.colors.black,
   });
 });
 
 test("create correct dark style", () => {
-  const styles = rntw({ ...defaultTheme, mode: "dark" }, classNames);
+  const { style, active, disabled } = rntw(
+    { ...defaultTheme, mode: "dark" },
+    classNames
+  );
 
-  expect(styles.color).toBe(defaultTheme.colors.blue[100]);
-  expect(styles.backgroundColor).toBe(undefined);
+  expect(style.color).toBe(defaultTheme.colors.blue[100]);
+  expect(style.backgroundColor).toBe(undefined);
 
-  expect(styles.flexDirection).toBe("row");
-  expect(styles.alignItems).toBe("center");
-  expect(styles.justifyContent).toBe("center");
-  expect(styles.fontSize).toBe(FontSizeMap["5xl"]);
-  expect(styles.opacity).toBe(undefined);
+  expect(style.flexDirection).toBe("row");
+  expect(style.alignItems).toBe("center");
+  expect(style.justifyContent).toBe("center");
+  expect(style.fontSize).toBe(FontSizeMap["5xl"]);
+  expect(style.opacity).toBe(undefined);
 
-  expect(styles.active).toMatchObject({
+  expect(active.style).toMatchObject({
     color: defaultTheme.colors.blue[200],
     backgroundColor: defaultTheme.colors.gray[900],
     opacity: OpacityMap[25],
   });
-  expect(styles.disabled).toMatchObject({
+  expect(disabled.style).toMatchObject({
     backgroundColor: defaultTheme.colors.black,
   });
 });
 
-test("border styles are correct", () => {
-  const styles = rntw(defaultTheme, [
+test("border style are correct", () => {
+  const { style } = rntw(defaultTheme, [
     "border",
     "rounded",
     "rounded-tr-2xl",
@@ -79,7 +82,7 @@ test("border styles are correct", () => {
     "border-dotted",
   ]);
 
-  expect(styles).toMatchObject({
+  expect(style).toMatchObject({
     borderWidth: BorderWidthMap["DEFAULT"],
     borderRadius: BorderRadiusMap["DEFAULT"],
     borderTopRightRadius: BorderRadiusMap["2xl"],
@@ -89,8 +92,8 @@ test("border styles are correct", () => {
   });
 });
 
-test("margin styles are correct", () => {
-  const styles = rntw(defaultTheme, [
+test("margin style are correct", () => {
+  const { style } = rntw(defaultTheme, [
     "p-2",
     "px-4",
     "pb-10",
@@ -99,12 +102,25 @@ test("margin styles are correct", () => {
     "my-2",
   ]);
 
-  expect(styles).toMatchObject({
+  expect(style).toMatchObject({
     padding: SpacingMap["2"],
     paddingHorizontal: SpacingMap["4"],
     paddingBottom: SpacingMap["10"],
     margin: SpacingMap["1"],
     marginBottom: SpacingMap["12"],
     marginVertical: SpacingMap["2"],
+  });
+});
+
+test("style are grouped correctly", () => {
+  const { style, text } = rntw(defaultTheme, ["bg-black", "text-white"]);
+
+  expect(style).toMatchObject({
+    color: defaultTheme.colors.white,
+    backgroundColor: defaultTheme.colors.black,
+  });
+
+  expect(text).toMatchObject({
+    color: defaultTheme.colors.white,
   });
 });

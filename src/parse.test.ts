@@ -1,4 +1,4 @@
-import { getProps } from "./parse";
+import { getProps } from "./get-props";
 
 test("props correct", () => {
   expect(getProps("rounded")).toMatchObject({
