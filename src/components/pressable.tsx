@@ -65,13 +65,14 @@ export function Pressable(props: Props) {
           variant !== "none"
             ? getMergedVariant(root, variant)
             : ({} as RNTWNode);
-        return Object.assign(
+        const style = Object.assign(
           {},
           node.view,
           typeof styleProp === "function"
             ? styleProp({ ...state, style: node.view, root })
             : styleProp
         );
+        return style;
       }}
     >
       {(state) => {

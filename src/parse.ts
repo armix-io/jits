@@ -1,6 +1,6 @@
 import { ViewStyle, TextStyle } from "react-native";
 import { Theme } from "./theme";
-import { ClassName, Color, Corner } from "./types";
+import { ClassName, Color } from "./types";
 import { getTarget } from "./get-target";
 import { getProps } from "./get-props";
 import { getColor } from "./get-color";
@@ -29,6 +29,35 @@ export const parse = (
         getTarget(target) || ""
       }`]: SpacingMap[parseInt(scale!) as keyof typeof SpacingMap],
     };
+  } else if (op === "rounded") {
+    const { scale, target } = props;
+    const value =
+      BorderRadiusMap[scale as keyof typeof BorderRadiusMap] ??
+      BorderRadiusMap.DEFAULT;
+    if (target === "l") {
+      return {
+        borderTopLeftRadius: value,
+        borderBottomLeftRadius: value,
+      };
+    } else if (target === "r") {
+      return {
+        borderTopRightRadius: value,
+        borderBottomRightRadius: value,
+      };
+    } else if (target === "t") {
+      return {
+        borderTopLeftRadius: value,
+        borderTopRightRadius: value,
+      };
+    } else if (target === "b") {
+      return {
+        borderBottomLeftRadius: value,
+        borderBottomRightRadius: value,
+      };
+    }
+    return {
+      [`border${getTarget(target) || ""}Radius`]: value,
+    };
   } else if (op === "border") {
     const { color, style, scale, target } = props;
     if (color) {
@@ -39,10 +68,10 @@ export const parse = (
     if (style) {
       return { borderStyle: style };
     }
-    const width =
+    const value =
       BorderWidthMap[scale as keyof typeof BorderWidthMap] ||
       BorderWidthMap.DEFAULT;
-    return { [`border${getTarget(target) || ""}Width`]: width };
+    return { [`border${getTarget(target) || ""}Width`]: value };
   }
 
   const args = className.split("-");
@@ -82,44 +111,6 @@ export const parse = (
     const ax = args.join("-") as Color;
     const backgroundColor = getColor(theme, ax);
     return (backgroundColor && { backgroundColor }) || undefined;
-    /**
-     * BORDER (radius)
-     */
-  } else if (a0 === "rounded") {
-    const [a1, a2] = args;
-    let size: number;
-    let corner: Corner | undefined = undefined;
-    if (a1 && a2) {
-      // rounded-{corner}-{size}
-      corner = a1 as Corner;
-      size = BorderRadiusMap[a2 as keyof typeof BorderRadiusMap];
-    } else if (a1) {
-      // rounded-{corner|size}
-      size = BorderRadiusMap[a1 as keyof typeof BorderRadiusMap];
-      // if size undefined, the argument is a corner using default size
-      if (!size) {
-        corner = a1 as Corner;
-        size = BorderRadiusMap.DEFAULT;
-      } else {
-        // size is the arg, all corners are the target
-      }
-    } else {
-      // rounded
-      // no args, all corners with default size
-      size = BorderRadiusMap.DEFAULT;
-    }
-
-    return !corner
-      ? { borderRadius: size }
-      : corner === "tr"
-      ? { borderTopRightRadius: size }
-      : corner === "tl"
-      ? { borderTopLeftRadius: size }
-      : corner === "br"
-      ? { borderBottomRightRadius: size }
-      : corner === "bl"
-      ? { borderBottomLeftRadius: size }
-      : undefined;
   } else {
     console.warn(`[rntw.parse] className '${className}' is not implemented`);
   }

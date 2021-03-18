@@ -124,3 +124,18 @@ test("style are grouped correctly", () => {
     color: defaultTheme.colors.white,
   });
 });
+
+test("rounded styles work correctly", () => {
+  const { style } = rntw(defaultTheme, [
+    "rounded",
+    "rounded-l-2xl",
+    "rounded-br-none",
+  ]);
+
+  expect(style).toMatchObject({
+    borderRadius: BorderRadiusMap.DEFAULT,
+    borderTopLeftRadius: BorderRadiusMap["2xl"],
+    borderBottomLeftRadius: BorderRadiusMap["2xl"],
+    borderBottomRightRadius: BorderRadiusMap.none,
+  });
+});

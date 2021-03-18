@@ -9,6 +9,10 @@ export type StateVariant =
   | "focus"
   | "disabled"
   | "checked"
+  | "first"
+  | "last"
+  | "odd"
+  | "even"
   | CustomVariant;
 
 export type ContextVariant = "dark";
