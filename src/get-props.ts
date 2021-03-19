@@ -1,12 +1,10 @@
 import { ClassName, Color, BorderStyle } from "./types";
-import { FontWeightMap } from "./maps";
 
 const reOp = /^(rounded|border|opacity|m|p|font)(t|r|b|l|x|y)?$/;
 const reTarget = /^(((t|b)(r|l)?)|(l|r|x|y))$/;
 const reScale = /^(none|full|xs|sm|md|lg|(\d*xl))$/;
 const reWeight = /^(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/;
 
-const matchFontWeight = Object.keys(FontWeightMap);
 const matchStyle = ["solid", "dotted", "dashed"];
 const matchColor = [
   "transparent",
