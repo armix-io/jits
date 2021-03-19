@@ -86,4 +86,8 @@ test("props correct", () => {
     target: "br",
     scale: "none",
   });
+  expect(getProps("font-semibold")).toMatchObject({
+    op: "font",
+    scale: "semibold",
+  });
 });

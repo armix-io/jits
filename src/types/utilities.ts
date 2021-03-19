@@ -7,6 +7,7 @@ import {
   AlignContentMap,
   JustifyContentMap,
   FontSizeMap,
+  FontWeightMap,
   OpacityMap,
   BorderRadiusMap,
   BorderWidthMap,
@@ -18,11 +19,18 @@ export type TextColor = `text-${Color}`;
 export type BackgroundColor = `bg-${Color}`;
 
 export type Flex = "flex" | `flex-${1 | 2 | 3 | 4 | 5 | keyof typeof FlexMap}`;
+
 export type AlignSelf = `self-${keyof typeof AlignSelfMap}`;
 export type AlignItems = `items-${keyof typeof AlignItemsMap}`;
 export type AlignContent = `content-${keyof typeof AlignContentMap}`;
 export type JustifyContent = `justify-${keyof typeof JustifyContentMap}`;
-export type FontSize = `text-${keyof typeof FontSizeMap}`;
+
+export type FontSize = keyof typeof FontSizeMap;
+export type FontSizeClass = `font-${keyof typeof FontSizeMap}`;
+
+export type FontWeight = keyof typeof FontWeightMap;
+export type FontWeightClass = `font-${keyof typeof FontWeightMap}`;
+
 export type Opacity = `opacity-${keyof typeof OpacityMap}`;
 export type MarginClass = `${"" | "-"}m${
   | ""

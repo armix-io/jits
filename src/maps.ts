@@ -62,7 +62,19 @@ export const FontSizeMap = {
   sm: rem(0.875),
   xl: rem(1.25),
   xs: rem(0.75),
-};
+} as const;
+
+export const FontWeightMap = {
+  thin: "100",
+  extralight: "200",
+  light: "300",
+  normal: "400",
+  medium: "500",
+  semibold: "600",
+  bold: "700",
+  extrabold: "800",
+  black: "900",
+} as const;
 
 export const OpacityMap = {
   0: 0,
@@ -80,7 +92,7 @@ export const OpacityMap = {
   90: 0.9,
   95: 0.95,
   100: 1,
-};
+} as const;
 
 export const SpacingMap = {
   0: 0,
@@ -118,7 +130,7 @@ export const SpacingMap = {
   80: rem(20),
   96: rem(24),
   px: 1,
-};
+} as const;
 
 export const BorderRadiusMap = {
   none: 0,
@@ -130,7 +142,7 @@ export const BorderRadiusMap = {
   "2xl": rem(1),
   "3xl": rem(1.5),
   full: 9999,
-};
+} as const;
 
 export const BorderWidthMap = {
   DEFAULT: 1,
@@ -138,10 +150,10 @@ export const BorderWidthMap = {
   "2": 2,
   "4": 4,
   "8": 8,
-};
+} as const;
 
 export const BorderStyleMap = {
   solid: "solid",
   dotted: "dotted",
   dashed: "dashed",
-};
+} as const;

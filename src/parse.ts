@@ -15,6 +15,7 @@ import {
   BorderRadiusMap,
   BorderWidthMap,
   SpacingMap,
+  FontWeightMap,
 } from "./maps";
 
 export const parse = (
@@ -29,6 +30,16 @@ export const parse = (
         getTarget(target) || ""
       }`]: SpacingMap[parseInt(scale!) as keyof typeof SpacingMap],
     };
+  } else if (op === "font") {
+    const { value } = props;
+    const fontWeight = FontWeightMap[value as keyof typeof FontWeightMap];
+    if (fontWeight) {
+      return { fontWeight };
+    }
+    const fontSize = FontSizeMap[value as keyof typeof FontSizeMap];
+    if (fontSize) {
+      return { fontSize };
+    }
   } else if (op === "rounded") {
     const { scale, target } = props;
     const value =

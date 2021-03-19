@@ -5,7 +5,8 @@ import {
   AlignItems,
   AlignContent,
   JustifyContent,
-  FontSize,
+  FontSizeClass,
+  FontWeightClass,
   Opacity,
   TextColor,
   BackgroundColor,
@@ -24,7 +25,8 @@ export type RootClassName =
   | AlignItems
   | AlignContent
   | JustifyContent
-  | FontSize
+  | FontSizeClass
+  | FontWeightClass
   | Opacity
   | TextColor
   | BackgroundColor

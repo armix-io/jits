@@ -1,9 +1,12 @@
 import { ClassName, Color, BorderStyle } from "./types";
+import { FontWeightMap } from "./maps";
 
-const reOp = /^(rounded|border|opacity|m|p)(t|r|b|l|x|y)?$/;
+const reOp = /^(rounded|border|opacity|m|p|font)(t|r|b|l|x|y)?$/;
 const reTarget = /^(((t|b)(r|l)?)|(l|r|x|y))$/;
+const reScale = /^(none|full|xs|sm|md|lg|(\d*xl))$/;
+const reWeight = /^(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/;
 
-const matchScale = ["none", "sm", "md", "lg", "xl", "2xl", "3xl", "full"];
+const matchFontWeight = Object.keys(FontWeightMap);
 const matchStyle = ["solid", "dotted", "dashed"];
 const matchColor = [
   "transparent",
@@ -24,6 +27,7 @@ export const getProps = (className: ClassName) => {
   const props: {
     op?: string;
     target?: string;
+    value?: string;
     scale?: string;
     color?: Color;
     style?: BorderStyle;
@@ -43,7 +47,7 @@ export const getProps = (className: ClassName) => {
     const $target = arg.match(reTarget);
     if ($target) {
       props.target = arg;
-    } else if (matchScale.includes(arg)) {
+    } else if (arg.match(reScale) || arg.match(reWeight)) {
       props.scale = arg;
     } else if (matchColor.includes(arg)) {
       const scale = args[i + 1];
@@ -58,5 +62,7 @@ export const getProps = (className: ClassName) => {
       }
     }
   }
+  // TODO: remove after stripping scale out
+  props.value = props.scale;
   return props;
 };
