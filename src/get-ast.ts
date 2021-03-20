@@ -1,11 +1,4 @@
-import { ContextVariant, StateVariant } from "./types";
-
-/**
- * split instruction into 2 groups if match
- * - (1) all decorators up to last ":" (if exists)
- * - (2) function
- */
-const reDecoratorsFunction = /^(?:(.*):)?(.*)$/;
+import { ContextVariant, Instruction, StateVariant } from "./types";
 
 const ops = [
   // margin/padding/height/width
@@ -58,24 +51,37 @@ const reOpTargetValue = new RegExp(
  * contexts are in-built features
  * any decorator that is not a context is a state
  */
-const matchContexts = ["dark"];
+const matchContexts = ["dark", "ios", "android"];
 
-export function getAst(instruction: string) {
-  const matchDecoratorsFunction = instruction.match(reDecoratorsFunction);
-  if (!matchDecoratorsFunction) {
-    throw new Error(`invalid instruction, ${instruction}`);
+export function getAst(instruction: Instruction) {
+  let fn: RegExpMatchArray | null = null;
+  const decorators: (ContextVariant | StateVariant)[] = [];
+
+  if (typeof instruction === "string") {
+    const matchOpTargetValue = instruction.match(reOpTargetValue);
+    fn = matchOpTargetValue;
+  } else {
+    fn = instruction;
+
+    instruction.forEach((item) => {
+      const matchOpTargetValue = item.match(reOpTargetValue);
+      if (matchOpTargetValue) {
+        fn = matchOpTargetValue;
+      } else {
+        decorators.push(item as ContextVariant | StateVariant);
+      }
+    });
   }
 
-  const [, $decorators, $function] = matchDecoratorsFunction;
-
-  const decorators = $decorators ? $decorators.split(":") : [];
-
-  const matchOpTargetValue = $function.match(reOpTargetValue);
-  if (!matchOpTargetValue) {
-    throw new Error(`invalid function, ${$function}`);
+  if (!fn) {
+    throw new Error(
+      `invalid instruction, ${
+        typeof instruction === "string" ? instruction : instruction.join(",")
+      }`
+    );
   }
 
-  const [, $sign, $op, $optarget, $target, $value] = matchOpTargetValue;
+  const [, $sign, $op, $optarget, $target, $value] = fn;
 
   // remove $optarget from $op if exists
   const op = $optarget ? $op.substring(0, $op.length - $optarget.length) : $op;
@@ -102,7 +108,7 @@ export function getAst(instruction: string) {
     value,
     states,
     contexts,
-    __function: $function,
+    __function: fn,
     __instruction: instruction,
   };
 }

@@ -1,21 +1,21 @@
 import { getAst } from "./get-ast";
 
 test("creates ast of instruction", () => {
-  expect(getAst("border-tr-none")).toMatchObject({
+  expect(getAst("border-t-0")).toMatchObject({
     op: "border",
-    target: "tr",
-    value: "none",
+    target: "t",
+    value: "0",
     states: [],
     contexts: [],
   });
-  expect(getAst("dark:active:border-tr-none")).toMatchObject({
+  expect(getAst(["dark", "active", "border-t-0"])).toMatchObject({
     op: "border",
-    target: "tr",
-    value: "none",
+    target: "t",
+    value: "0",
     states: ["active"],
     contexts: ["dark"],
   });
-  expect(getAst("active:border-red-500")).toMatchObject({
+  expect(getAst(["active", "border-red-500"])).toMatchObject({
     op: "border",
     target: undefined,
     value: "red-500",

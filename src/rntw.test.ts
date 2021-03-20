@@ -1,6 +1,6 @@
 import { rntw } from "./rntw";
 import { defaultTheme } from "./theme";
-import { ClassName } from "./types";
+import { Instruction } from "./types";
 import {
   BorderRadiusMap,
   BorderWidthMap,
@@ -9,20 +9,20 @@ import {
   SpacingMap,
 } from "./maps";
 
-const classNames: ClassName[] = [
+const classNames: Instruction[] = [
   "text-blue-600",
-  "dark:text-blue-100",
-  "active:text-blue-200",
-  "active:bg-gray-100",
-  "dark:active:bg-gray-900",
-  "disabled:bg-black",
+  ["dark", "text-blue-100"],
+  ["active", "text-blue-200"],
+  ["active", "bg-gray-100"],
+  ["dark", "active", "bg-gray-900"],
+  ["disabled", "bg-black"],
   "flex-row",
   "items-center",
   "justify-center",
   "text-3xl",
-  "dark:text-5xl",
-  "active:opacity-50",
-  "dark:active:opacity-25",
+  ["dark", "text-5xl"],
+  ["active", "opacity-50"],
+  ["dark", "active", "opacity-25"],
 ];
 
 test("create correct style", () => {

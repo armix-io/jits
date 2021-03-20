@@ -6,7 +6,7 @@ test("correct merged variant", () => {
   const root = rntw(defaultTheme, [
     "bg-black",
     "text-blue-500",
-    "active:text-white",
+    ["active", "text-white"],
   ]);
 
   const style = getMergedVariant(root, "active");
@@ -26,7 +26,7 @@ test("correct merged undefined variant", () => {
   const root = rntw(defaultTheme, [
     "bg-black",
     "text-blue-500",
-    "active:text-white",
+    ["active", "text-white"],
   ]);
 
   const style = getMergedVariant(root, undefined);
