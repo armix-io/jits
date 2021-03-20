@@ -1,4 +1,4 @@
-import { ContextVariant, Instruction, StateVariant } from "./types";
+import { ContextVariant, Instruction, Op, StateVariant } from "./types";
 
 const ops = [
   // margin/padding/height/width
@@ -54,34 +54,36 @@ const reOpTargetValue = new RegExp(
 const matchContexts = ["dark", "ios", "android"];
 
 export function getAst(instruction: Instruction) {
-  let fn: RegExpMatchArray | null = null;
-  const decorators: (ContextVariant | StateVariant)[] = [];
+  // if array clone it as to not mutate incoming instruction
+  const $instruction =
+    typeof instruction === "string" ? instruction : [...instruction];
 
-  if (typeof instruction === "string") {
-    const matchOpTargetValue = instruction.match(reOpTargetValue);
-    fn = matchOpTargetValue;
-  } else {
-    fn = instruction;
-
-    instruction.forEach((item) => {
-      const matchOpTargetValue = item.match(reOpTargetValue);
-      if (matchOpTargetValue) {
-        fn = matchOpTargetValue;
-      } else {
-        decorators.push(item as ContextVariant | StateVariant);
-      }
-    });
+  // empty string or empty array
+  if (!$instruction.length) {
+    throw new Error(`empty instruction`);
   }
 
-  if (!fn) {
+  // fn is string or last element of array
+  const fn =
+    typeof $instruction === "string"
+      ? $instruction
+      : ($instruction.pop() as Op);
+  // decorators are everything left over after pop, or empty if string
+  const decorators =
+    typeof $instruction === "string"
+      ? []
+      : ($instruction as (ContextVariant | StateVariant)[]);
+
+  const matchOpTargetValue = fn.match(reOpTargetValue);
+  if (!matchOpTargetValue) {
     throw new Error(
-      `invalid instruction, ${
-        typeof instruction === "string" ? instruction : instruction.join(",")
+      `invalid function '${fn}', ${
+        decorators.length ? `(${decorators.join(",")})` : ""
       }`
     );
   }
 
-  const [, $sign, $op, $optarget, $target, $value] = fn;
+  const [, $sign, $op, $optarget, $target, $value] = matchOpTargetValue;
 
   // remove $optarget from $op if exists
   const op = $optarget ? $op.substring(0, $op.length - $optarget.length) : $op;
