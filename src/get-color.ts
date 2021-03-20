@@ -1,17 +1,18 @@
 import { Theme } from "./theme";
-import { Color, ColorName, ColorScale } from "./types";
+import { Color } from "./types";
+import { maybe } from "./maybe";
 
 export const getColor = (theme: Theme, color: Color) => {
-  if (color === "transparent") {
-    return theme.colors.transparent as string;
-  } else if (color === "black") {
-    return theme.colors.black as string;
-  } else if (color === "white") {
-    return theme.colors.white as string;
-  } else {
-    const args = color.split("-");
-    const name = args[0] as ColorName;
-    const scale = parseInt(args[1]) as ColorScale;
-    return theme.colors[name][scale];
+  const [$name, $scale] = color.split("-") as [string, string | undefined];
+
+  const colorSetOrValue = maybe(theme.colors, $name);
+  if (!colorSetOrValue) return;
+  if (typeof colorSetOrValue === "string") {
+    return colorSetOrValue;
   }
+
+  const colorSet = colorSetOrValue;
+  const colorValue = maybe(colorSet, $scale);
+  if (!colorValue) return;
+  return colorValue;
 };

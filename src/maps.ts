@@ -1,22 +1,5 @@
 import { rem } from "./rem";
 
-export const FlexMap = {
-  auto: { flexGrow: 1, flexShrink: 1, flexBasis: "auto" },
-  initial: { flexGrow: 0, flexShrink: 1, flexBasis: "auto" },
-  none: { flexGrow: 0, flexShrink: 0, flexBasis: "auto" },
-  col: { flexDirection: "column" },
-  "col-reverse": { flexDirection: "column-reverse" },
-  row: { flexDirection: "row" },
-  "row-reverse": { flexDirection: "row-reverse" },
-  grow: { flexGrow: 1 },
-  "grow-0": { flexGrow: 0 },
-  shrink: { flexShrink: 1 },
-  "shrink-0": { flexShrink: 0 },
-  wrap: { flexWrap: "wrap" },
-  "wrap-reverse": { flexWrap: "wrap-reverse" },
-  nowrap: { flexWrap: "nowrap" },
-} as const;
-
 export const AlignSelfMap = {
   auto: "auto",
   center: "center",
@@ -146,14 +129,49 @@ export const BorderRadiusMap = {
 
 export const BorderWidthMap = {
   DEFAULT: 1,
-  "0": 0,
-  "2": 2,
-  "4": 4,
-  "8": 8,
+  0: 0,
+  2: 2,
+  4: 4,
+  8: 8,
 } as const;
 
 export const BorderStyleMap = {
   solid: "solid",
   dotted: "dotted",
   dashed: "dashed",
+} as const;
+
+export const ZIndexMap = {
+  0: 0,
+  10: 10,
+  20: 20,
+  30: 30,
+  40: 40,
+  50: 50,
+} as const;
+
+export const TrackingMap = {
+  tighter: rem(-0.05),
+  tight: rem(-0.025),
+  normal: rem(0),
+  wide: rem(0.025),
+  wider: rem(0.05),
+  widest: rem(0.1),
+} as const;
+
+export const LeadingMap = {
+  3: rem(0.75),
+  4: rem(1),
+  5: rem(1.25),
+  6: rem(1.5),
+  7: rem(1.75),
+  8: rem(2),
+  9: rem(2.25),
+  10: rem(2.5),
+  none: 1,
+  tight: 1.25,
+  snug: 1.375,
+  normal: 1.5,
+  relaxed: 1.625,
+  loose: 2,
 } as const;

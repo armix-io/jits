@@ -6,7 +6,8 @@ import {
   StateVariant,
   ContextVariant,
 } from "./types";
-import { parse } from "./parse";
+import { getAst } from "./get-ast";
+import { getAstStyle } from "./get-ast-style";
 import { getTypeGroups } from "./get-type-groups";
 
 // with variants, return type of rntw
@@ -47,10 +48,13 @@ export const rntw = (theme: Theme, classNames: ClassName[]) => {
 
       if (isOverrideVariant) {
         if (isDarkVariant && isThemeDark) {
-          Object.assign(style.overrides, parse(theme, _className));
+          Object.assign(
+            style.overrides,
+            getAstStyle(theme, getAst(_className))
+          );
         }
       } else {
-        Object.assign(style, parse(theme, _className));
+        Object.assign(style, getAstStyle(theme, getAst(_className)));
       }
 
       styles.set(variant, style);
