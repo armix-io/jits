@@ -1,3 +1,5 @@
+import { ContextVariant, StateVariant } from "./types";
+
 /**
  * split instruction into 2 groups if match
  * - (1) all decorators up to last ":" (if exists)
@@ -82,15 +84,15 @@ export function getAst(instruction: string) {
 
   const value = $value ? `${$sign || ""}${$value}` : undefined;
 
-  const states = [];
+  const states: StateVariant[] = [];
 
-  const contexts = [];
+  const contexts: ContextVariant[] = [];
 
   for (const decorator of decorators) {
     if (matchContexts.includes(decorator)) {
-      contexts.push(decorator);
+      contexts.push(decorator as ContextVariant);
     } else {
-      states.push(decorator);
+      states.push(decorator as StateVariant);
     }
   }
 

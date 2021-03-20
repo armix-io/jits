@@ -20,44 +20,40 @@ export type WithRNTWProps<P> = P & {
   variant?: StateVariant | "none";
 };
 
-export const rntw = (theme: Theme, classNames: ClassName[]) => {
+export const rntw = (theme: Theme, instructions: ClassName[]) => {
   const { mode } = theme;
+
   const isThemeDark = mode === "dark";
 
-  const styles = new Map<
-    "DEFAULT" | StateVariant,
-    Style & { overrides: Style }
-  >();
+  type StyleStates = "DEFAULT" | StateVariant;
 
-  classNames.forEach((className: ClassName) => {
-    const parts = className.split(":");
-    const _className = parts.pop() as ClassName;
-    const variants = new Set(
-      parts as ("DEFAULT" | StateVariant | ContextVariant)[]
-    );
+  const styles = new Map<StyleStates, Style & { overrides: Style }>();
 
-    const isDarkVariant = variants.delete("dark");
-    // or || any other override variant
-    const isOverrideVariant = isDarkVariant;
+  const asts = instructions.map(getAst);
 
-    if (!variants.size) variants.add("DEFAULT");
+  asts.forEach((ast) => {
+    const states = ast.states as StyleStates[];
 
-    variants.forEach((variant) => {
-      if (variant === "dark") return;
-      const style = styles.get(variant) || { overrides: {} };
+    // if root, because no state decorators, add "DEFAULT" state
+    if (!states.length) {
+      states.push("DEFAULT");
+    }
 
-      if (isOverrideVariant) {
-        if (isDarkVariant && isThemeDark) {
-          Object.assign(
-            style.overrides,
-            getAstStyle(theme, getAst(_className))
-          );
-        }
+    const astDark = ast.contexts.includes("dark");
+    const astOverride = astDark;
+    // if ast requires dark context, but theme isn't dark, skip
+    if (astDark && !isThemeDark) {
+      return;
+    }
+
+    states.forEach((state) => {
+      const style = styles.get(state) || { overrides: {} };
+      if (astOverride) {
+        Object.assign(style.overrides, getAstStyle(theme, ast));
       } else {
-        Object.assign(style, getAstStyle(theme, getAst(_className)));
+        Object.assign(style, getAstStyle(theme, ast));
       }
-
-      styles.set(variant, style);
+      styles.set(state, style);
     });
   });
 
