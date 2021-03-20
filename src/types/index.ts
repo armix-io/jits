@@ -1,4 +1,4 @@
-export * from "./classname";
+export * from "./instruction";
 export * from "./color";
 export * from "./config";
 export * from "./style";

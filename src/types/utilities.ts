@@ -1,7 +1,7 @@
 import { Color } from "./color";
 import { Axis, Side, Corner } from "./target";
+import { Theme } from "../theme";
 import {
-  FlexMap,
   AlignSelfMap,
   AlignItemsMap,
   AlignContentMap,
@@ -13,49 +13,140 @@ import {
   BorderWidthMap,
   BorderStyleMap,
   SpacingMap,
+  OverflowMap,
+  ZIndexMap,
+  TextAlignMap,
+  TextAlignVerticalMap,
+  WritingDirectionMap,
+  TrackingMap,
+  LeadingMap,
+  TextTransformMap,
+  TextDecorationStyleMap,
+  TextDecorationLineMap,
 } from "../maps";
-
-export type TextColor = `text-${Color}`;
-export type BackgroundColor = `bg-${Color}`;
-
-export type Flex = "flex" | `flex-${1 | 2 | 3 | 4 | 5 | keyof typeof FlexMap}`;
-
-export type AlignSelf = `self-${keyof typeof AlignSelfMap}`;
-export type AlignItems = `items-${keyof typeof AlignItemsMap}`;
-export type AlignContent = `content-${keyof typeof AlignContentMap}`;
-export type JustifyContent = `justify-${keyof typeof JustifyContentMap}`;
-
-export type FontSize = keyof typeof FontSizeMap;
-export type FontSizeClass = `font-${keyof typeof FontSizeMap}`;
-
-export type FontWeight = keyof typeof FontWeightMap;
-export type FontWeightClass = `font-${keyof typeof FontWeightMap}`;
-
-export type Opacity = `opacity-${keyof typeof OpacityMap}`;
-export type MarginClass = `${"" | "-"}m${
-  | ""
-  | Axis
-  | Side}-${keyof typeof SpacingMap}`;
-export type PaddingClass = `${"" | "-"}p${
-  | ""
-  | Axis
-  | Side}-${keyof typeof SpacingMap}`;
 
 type WithoutDefault<T> = Exclude<T, "DEFAULT">;
 
-export type BorderRadius = `rounded${
+export type MPTBLRSEOp = `${"" | "-"}${
+  | "m"
+  | "p"
+  | "top"
+  | "bottom"
+  | "left"
+  | "right"
+  | "start"
+  | "end"}${"" | Axis | Side}-${keyof typeof SpacingMap}`;
+
+export type HWOp = `${"h" | "w"}-${keyof typeof SpacingMap}`;
+
+export type OverflowOp = `overflow-${keyof typeof OverflowMap}`;
+
+export type HiddenOp = `hidden`;
+
+export type FlexOp = `flex${
+  | ""
+  | `-${
+      | `${"row" | "col"}${"" | `-${"reverse"}`}`
+      | `${"grow" | "shrink"}${"" | `-${"0"}`}`
+      | `wrap${"" | `-${"reverse"}`}`
+      | "nowrap"
+      | "auto"
+      | "initial"
+      | "none"
+      | 1
+      | 2
+      | 3
+      | 4
+      | 5}`}`;
+
+export type SelfOp = `self-${keyof typeof AlignSelfMap}`;
+
+export type ItemsOp = `items-${keyof typeof AlignItemsMap}`;
+
+export type ContentOp = `content-${keyof typeof AlignContentMap}`;
+
+export type JustifyOp = `justify-${keyof typeof JustifyContentMap}`;
+
+export type BGOp = `bg-${Color}`;
+
+export type OpacityOp = `opacity-${keyof typeof OpacityMap}`;
+
+export type BorderOp = `border${
+  | ""
+  | `${"" | `-${Side}`}${
+      | ""
+      | `-${keyof typeof BorderStyleMap}`
+      | `-${WithoutDefault<keyof typeof BorderWidthMap>}`
+      | `-${Color}`}`}`;
+
+export type RoundedOp = `rounded${
   | ""
   | `${"" | `-${Side | Corner}`}${
       | ""
       | `-${WithoutDefault<keyof typeof BorderRadiusMap>}`}`}`;
-export type BorderWidth = `border${
-  | ""
-  | `${"" | `-${Side}`}${
-      | ""
-      | `-${WithoutDefault<keyof typeof BorderWidthMap>}`}`}`;
-export type BorderColor = `border-${Color | `${Side}-${Color}`}`;
-// TODO: opacity must convert border-color to rbga and set alpha using opacity
-export type BorderOpacity = `border-opacity-${keyof typeof OpacityMap}`;
 
-export type BorderStyle = keyof typeof BorderStyleMap;
-export type BorderStyleClass = `border-${keyof typeof BorderStyleMap}`;
+export type PositionOp = "absolute" | "relative";
+
+export type ZOp = `z-${keyof typeof ZIndexMap}`;
+
+export type ShadowOp = never;
+
+export type AspectOp = never;
+
+export type LTRRTLOp = "ltr" | "rtl";
+
+export type TextOp = `text-${
+  | keyof typeof FontSizeMap
+  | keyof typeof TextAlignMap
+  | keyof typeof TextAlignVerticalMap
+  | keyof typeof WritingDirectionMap
+  | Color}`;
+
+export type FontOp = `font-${
+  | keyof typeof FontWeightMap
+  | keyof Theme["fonts"]}`;
+
+export type ItalicOp = "italic" | "non-italic";
+
+export type TrackingOp = `tracking-${keyof typeof TrackingMap}`;
+
+export type LeadingOp = `tracking-${keyof typeof LeadingMap}`;
+
+export type TransformOp = keyof typeof TextTransformMap;
+
+export type UnderlineOp =
+  | keyof typeof TextDecorationLineMap
+  | `underline-${keyof typeof TextDecorationStyleMap | Color}`;
+
+export type TintOp = `tint-${Color}`;
+
+export type OverlayOp = `overlay-${Color}`;
+
+export type Op =
+  | MPTBLRSEOp
+  | HWOp
+  | OverflowOp
+  | HiddenOp
+  | FlexOp
+  | SelfOp
+  | ItemsOp
+  | ContentOp
+  | JustifyOp
+  | BGOp
+  | OpacityOp
+  | BorderOp
+  | RoundedOp
+  | PositionOp
+  | ZOp
+  | ShadowOp
+  | AspectOp
+  | LTRRTLOp
+  | TextOp
+  | FontOp
+  | ItalicOp
+  | TrackingOp
+  | LeadingOp
+  | TransformOp
+  | UnderlineOp
+  | TintOp
+  | OverlayOp;

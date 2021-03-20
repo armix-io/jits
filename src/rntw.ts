@@ -1,26 +1,18 @@
 import { Theme } from "./theme";
-import {
-  Style,
-  ClassName,
-  StyleType,
-  StateVariant,
-  ContextVariant,
-} from "./types";
+import { Style, Instruction, StyleType, StateVariant } from "./types";
 import { getAst } from "./get-ast";
 import { getAstStyle } from "./get-ast-style";
 import { getTypeGroups } from "./get-type-groups";
-
-// with variants, return type of rntw
 
 export type RNTWNode = Record<"style" | StyleType, Style>;
 export type RNTWRoot = RNTWNode & Partial<Record<StateVariant, RNTWNode>>;
 
 export type WithRNTWProps<P> = P & {
-  className?: ClassName[];
+  className?: Instruction[];
   variant?: StateVariant | "none";
 };
 
-export const rntw = (theme: Theme, instructions: ClassName[]) => {
+export const rntw = (theme: Theme, instructions: Instruction[]) => {
   const { mode } = theme;
 
   const isThemeDark = mode === "dark";
@@ -41,6 +33,7 @@ export const rntw = (theme: Theme, instructions: ClassName[]) => {
 
     const astDark = ast.contexts.includes("dark");
     const astOverride = astDark;
+
     // if ast requires dark context, but theme isn't dark, skip
     if (astDark && !isThemeDark) {
       return;

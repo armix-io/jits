@@ -202,3 +202,22 @@ export const TextDecorationStyleMap = {
   dotted: "dotted",
   dashed: "dashed",
 } as const;
+
+export const TextDecorationLineMap = {
+  underline: "underline",
+  "line-through": "line-through",
+  "no-underline": "none",
+};
+
+export const OverflowMap = {
+  visible: "visible",
+  hidden: "hidden",
+  scroll: "scroll",
+} as const;
+
+export const TextTransformMap = {
+  uppercase: "uppercase",
+  lowercase: "lowercase",
+  capitalize: "capitalize",
+  "normal-case": "none",
+} as const;

@@ -14,10 +14,13 @@ import {
   JustifyContentMap,
   LeadingMap,
   OpacityMap,
+  OverflowMap,
   SpacingMap,
   TextAlignMap,
   TextAlignVerticalMap,
+  TextDecorationLineMap,
   TextDecorationStyleMap,
+  TextTransformMap,
   TrackingMap,
   WritingDirectionMap,
   ZIndexMap,
@@ -89,7 +92,7 @@ export function getAstStyle(theme: Theme, ast: AST) {
       return requiresValue();
     }
 
-    const overflow = ["visible", "hidden", "scroll"].includes($value) && $value;
+    const overflow = maybe(OverflowMap, $value);
     if (overflow !== undefined) {
       return { overflow };
     }
@@ -441,13 +444,8 @@ export function getAstStyle(theme: Theme, ast: AST) {
     op === "capitalize" ||
     op === "normal-case"
   ) {
-    if (op === "normal-case") {
-      return {
-        textTransform: "none",
-      };
-    }
     return {
-      textTransform: op,
+      textTransform: TextTransformMap[op],
     };
   }
 
@@ -470,13 +468,8 @@ export function getAstStyle(theme: Theme, ast: AST) {
   }
 
   if (op === "line-through" || op === "no-underline") {
-    if (op === "no-underline") {
-      return {
-        textDecorationLine: "none",
-      };
-    }
     return {
-      textDecorationLine: op,
+      textDecorationLine: TextDecorationLineMap[op],
     };
   }
 

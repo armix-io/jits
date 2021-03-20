@@ -15,4 +15,5 @@ export type StateVariant =
   | "even"
   | CustomVariant;
 
+// TODO: add ios/android context variants for platform specific styles
 export type ContextVariant = "dark";
