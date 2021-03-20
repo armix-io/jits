@@ -2,36 +2,37 @@ import { rem } from "./rem";
 
 export const AlignSelfMap = {
   auto: "auto",
-  center: "center",
-  end: "flex-end",
   start: "flex-start",
+  end: "flex-end",
+  center: "center",
   stretch: "stretch",
+  baseline: "baseline",
 } as const;
 
 export const AlignItemsMap = {
-  baseline: "baseline",
-  center: "center",
-  end: "flex-end",
   start: "flex-start",
+  end: "flex-end",
+  center: "center",
   stretch: "stretch",
+  baseline: "baseline",
 } as const;
 
 export const AlignContentMap = {
-  around: "space-around",
-  between: "space-between",
-  center: "center",
-  end: "flex-end",
   start: "flex-start",
+  end: "flex-end",
+  center: "center",
   stretch: "stretch",
+  between: "space-between",
+  around: "space-around",
 } as const;
 
 export const JustifyContentMap = {
-  around: "space-around",
-  between: "space-between",
-  center: "center",
-  end: "flex-end",
-  evenly: "space-evenly",
   start: "flex-start",
+  end: "flex-end",
+  center: "center",
+  between: "space-between",
+  around: "space-around",
+  evenly: "space-evenly",
 } as const;
 
 export const FontSizeMap = {
@@ -174,4 +175,30 @@ export const LeadingMap = {
   normal: 1.5,
   relaxed: 1.625,
   loose: 2,
+} as const;
+
+export const TextAlignMap = {
+  left: "left",
+  right: "right",
+  center: "center",
+  justify: "justify",
+} as const;
+
+export const TextAlignVerticalMap = {
+  top: "top",
+  bottom: "bottom",
+  middle: "center",
+  auto: "auto",
+} as const;
+
+export const WritingDirectionMap = {
+  ltr: "ltr",
+  rtl: "rtl",
+} as const;
+
+export const TextDecorationStyleMap = {
+  solid: "solid",
+  double: "double",
+  dotted: "dotted",
+  dashed: "dashed",
 } as const;

@@ -1,17 +1,25 @@
 import { Color } from "./types";
-import { defaultTheme, Theme } from "./theme";
+import { Theme } from "./theme";
 import { AST } from "./get-ast";
 import { getTarget } from "./get-target";
 import {
+  AlignContentMap,
+  AlignItemsMap,
+  AlignSelfMap,
   BorderRadiusMap,
   BorderStyleMap,
   BorderWidthMap,
   FontSizeMap,
   FontWeightMap,
+  JustifyContentMap,
   LeadingMap,
   OpacityMap,
   SpacingMap,
+  TextAlignMap,
+  TextAlignVerticalMap,
+  TextDecorationStyleMap,
   TrackingMap,
+  WritingDirectionMap,
   ZIndexMap,
 } from "./maps";
 import { getColor } from "./get-color";
@@ -30,12 +38,21 @@ export function getAstStyle(theme: Theme, ast: AST) {
     throw new Error(`invalid op '${op}', ${ast.__function}`);
   };
 
-  if (op === "m" || op === "p") {
+  if (
+    op === "m" ||
+    op === "p" ||
+    op === "top" ||
+    op === "bottom" ||
+    op === "left" ||
+    op === "right" ||
+    op === "start" ||
+    op === "end"
+  ) {
     if (!$value) {
       return requiresValue();
     }
 
-    const key = `${op === "m" ? "margin" : "padding"}${
+    const key = `${op === "m" ? "margin" : op === "p" ? "padding" : op}${
       getTarget($target) || ""
     }`;
 
@@ -67,30 +84,17 @@ export function getAstStyle(theme: Theme, ast: AST) {
     return invalidValue();
   }
 
-  if (
-    op === "top" ||
-    op === "bottom" ||
-    op === "left" ||
-    op === "right" ||
-    op === "start" ||
-    op === "end"
-  ) {
-    const key = op;
+  if (op === "overflow") {
+    if (!$value) {
+      return requiresValue();
+    }
 
-    const value = maybe(SpacingMap, $value);
-    if (value !== undefined) {
-      return {
-        [key]: value,
-      };
+    const overflow = ["visible", "hidden", "scroll"].includes($value) && $value;
+    if (overflow !== undefined) {
+      return { overflow };
     }
 
     return invalidValue();
-  }
-
-  if (op === "overflow") {
-    return {
-      overflow: $value,
-    };
   }
 
   if (op === "hidden") {
@@ -118,9 +122,9 @@ export function getAstStyle(theme: Theme, ast: AST) {
       return { flexGrow: 0, flexShrink: 0, flexBasis: "auto" };
     }
 
-    const value = parseInt($value);
-    if (!isNaN(value)) {
-      return { flex: value };
+    const flex = parseInt($value);
+    if (!isNaN(flex)) {
+      return { flex };
     }
 
     return invalidValue();
@@ -136,11 +140,21 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     if (op.endsWith("-grow")) {
-      return { flexGrow: $value ? $value : "1" };
+      const flexGrow = $value ? parseInt($value) : 1;
+      if (!isNaN(flexGrow)) {
+        return { flexGrow };
+      }
+
+      return invalidValue();
     }
 
     if (op.endsWith("-shrink")) {
-      return { flexShrink: $value ? $value : "1" };
+      const flexShrink = $value ? parseInt($value) : 1;
+      if (!isNaN(flexShrink)) {
+        return { flexShrink };
+      }
+
+      return invalidValue();
     }
 
     if (op.endsWith("-wrap")) {
@@ -150,6 +164,8 @@ export function getAstStyle(theme: Theme, ast: AST) {
     if (op.endsWith("-nowrap")) {
       return { flexWrap: "nowrap" };
     }
+
+    return invalidOp();
   }
 
   if (op === "self") {
@@ -157,13 +173,12 @@ export function getAstStyle(theme: Theme, ast: AST) {
       return requiresValue();
     }
 
-    const value = `${
-      $value === "start" || $value === "end" ? "flex-" : ""
-    }${$value}`;
+    const alignSelf = maybe(AlignSelfMap, $value);
+    if (alignSelf !== undefined) {
+      return { alignSelf };
+    }
 
-    return {
-      alignSelf: value,
-    };
+    return invalidValue();
   }
 
   if (op === "items") {
@@ -171,13 +186,12 @@ export function getAstStyle(theme: Theme, ast: AST) {
       return requiresValue();
     }
 
-    const value = `${
-      $value === "start" || $value === "end" ? "flex-" : ""
-    }${$value}`;
+    const alignItems = maybe(AlignItemsMap, $value);
+    if (alignItems !== undefined) {
+      return { alignItems };
+    }
 
-    return {
-      alignItems: value,
-    };
+    return invalidValue();
   }
 
   if (op === "content") {
@@ -185,17 +199,12 @@ export function getAstStyle(theme: Theme, ast: AST) {
       return requiresValue();
     }
 
-    const value = `${
-      $value === "start" || $value === "end"
-        ? "flex-"
-        : $value === "between" || $value === "around" || $value === "evenly"
-        ? "space-"
-        : ""
-    }${$value}`;
+    const alignContent = maybe(AlignContentMap, $value);
+    if (alignContent !== undefined) {
+      return { alignContent };
+    }
 
-    return {
-      alignContent: value,
-    };
+    return invalidValue();
   }
 
   if (op === "justify") {
@@ -203,17 +212,12 @@ export function getAstStyle(theme: Theme, ast: AST) {
       return requiresValue();
     }
 
-    const value = `${
-      $value === "start" || $value === "end"
-        ? "flex-"
-        : $value === "between" || $value === "around" || $value === "evenly"
-        ? "space-"
-        : ""
-    }${$value}`;
+    const justifyContent = maybe(JustifyContentMap, $value);
+    if (justifyContent !== undefined) {
+      return { justifyContent };
+    }
 
-    return {
-      justifyContent: value,
-    };
+    return invalidValue();
   }
 
   if (op === "bg") {
@@ -222,7 +226,7 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     const color = getColor(theme, $value as Color);
-    if (color) {
+    if (color !== undefined) {
       return {
         backgroundColor: color,
       };
@@ -237,7 +241,7 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     const opacity = maybe(OpacityMap, $value);
-    if (opacity) {
+    if (opacity !== undefined) {
       return {
         opacity,
       };
@@ -248,7 +252,7 @@ export function getAstStyle(theme: Theme, ast: AST) {
 
   if (op === "border") {
     const style = maybe(BorderStyleMap, $value);
-    if (style) {
+    if (style !== undefined) {
       return {
         borderStyle: style,
       };
@@ -270,7 +274,7 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     const color = getColor(theme, $value as Color);
-    if (color) {
+    if (color !== undefined) {
       return {
         [`${key}Color`]: color,
       };
@@ -349,24 +353,22 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     const fontSize = maybe(FontSizeMap, $value);
-    if (fontSize) {
+    if (fontSize !== undefined) {
       return { fontSize };
     }
 
-    const textAlign =
-      ["left", "right", "center", "justify"].includes($value) && $value;
-    if (textAlign) {
+    const textAlign = maybe(TextAlignMap, $value);
+    if (textAlign !== undefined) {
       return { textAlign };
     }
 
-    const textAlignVertical =
-      ["top", "bottom", "middle", "auto"].includes($value) && $value;
-    if (textAlignVertical) {
+    const textAlignVertical = maybe(TextAlignVerticalMap, $value);
+    if (textAlignVertical !== undefined) {
       return { textAlignVertical };
     }
 
-    const writingDirection = ["ltr", "rtl"].includes($value) && $value;
-    if (writingDirection) {
+    const writingDirection = maybe(WritingDirectionMap, $value);
+    if (writingDirection !== undefined) {
       return { writingDirection };
     }
 
@@ -384,17 +386,17 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     const fontWeight = maybe(FontWeightMap, $value);
-    if (fontWeight) {
+    if (fontWeight !== undefined) {
       return { fontWeight };
     }
 
-    const os = defaultTheme.os;
+    const os = theme.os;
     if (!os) {
       return console.warn(`os unknown, ${ast.__function}`);
     }
 
-    const fontFamily = maybe(defaultTheme.fonts, $value);
-    if (fontFamily) {
+    const fontFamily = maybe(theme.fonts, $value);
+    if (fontFamily !== undefined) {
       return { fontFamily: fontFamily[os] };
     }
 
@@ -413,7 +415,7 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     const letterSpacing = maybe(TrackingMap, $value);
-    if (letterSpacing) {
+    if (letterSpacing !== undefined) {
       return { letterSpacing };
     }
 
@@ -426,7 +428,7 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     const lineHeight = maybe(LeadingMap, $value);
-    if (lineHeight) {
+    if (lineHeight !== undefined) {
       return { lineHeight };
     }
 
@@ -450,12 +452,21 @@ export function getAstStyle(theme: Theme, ast: AST) {
   }
 
   if (op.startsWith("underline")) {
-    return Object.assign(
-      {
-        textDecorationLine: "underline",
-      },
-      $value ? { textDecorationStyle: $value } : undefined
-    );
+    if (!$value) {
+      return { textDecorationLine: "underline" };
+    }
+
+    const textDecorationStyle = maybe(TextDecorationStyleMap, $value);
+    if (textDecorationStyle !== undefined) {
+      return { textDecorationStyle };
+    }
+
+    const textDecorationColor = getColor(theme, $value as Color);
+    if (textDecorationColor !== undefined) {
+      return { textDecorationColor };
+    }
+
+    return invalidValue();
   }
 
   if (op === "line-through" || op === "no-underline") {
@@ -475,7 +486,7 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     const tintColor = getColor(theme, $value as Color);
-    if (tintColor) {
+    if (tintColor !== undefined) {
       return { tintColor };
     }
 
@@ -488,7 +499,7 @@ export function getAstStyle(theme: Theme, ast: AST) {
     }
 
     const overlayColor = getColor(theme, $value as Color);
-    if (overlayColor) {
+    if (overlayColor !== undefined) {
       return { overlayColor };
     }
 

@@ -8,11 +8,11 @@ const reDecoratorsFunction = /^(?:(.*):)?(.*)$/;
 const ops = [
   // margin/padding/height/width
   "(?:m|p)(\\w*)",
-  "h|w",
   "top|bottom|left|right|start|end",
+  "h|w",
   // display
   "overflow",
-  "hidden|flex(?:-(?:row|col|grow|shrink|wrap|nowrap))",
+  "hidden|flex(?:-(?:row|col|grow|shrink|wrap|nowrap))?",
   // flex utilities
   "self|items|content|justify",
   // view
