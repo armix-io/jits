@@ -1,5 +1,5 @@
 import { Theme } from "./theme";
-import { Style, Instruction, StyleType, StateVariant } from "./types";
+import { Style, Instruction as Token, StyleType, StateVariant } from "./types";
 import { getAst } from "./get-ast";
 import { getAstStyle } from "./get-ast-style";
 import { getTypeGroups } from "./get-type-groups";
@@ -7,12 +7,18 @@ import { getTypeGroups } from "./get-type-groups";
 export type RNTWNode = Record<"style" | StyleType, Style>;
 export type RNTWRoot = RNTWNode & Partial<Record<StateVariant, RNTWNode>>;
 
-export type WithRNTWProps<P> = P & {
-  className?: Instruction[];
-  variant?: StateVariant | "none";
+export type StyleProp<S extends {} = Style> = S | (Token | S)[];
+export type VariantProp = StateVariant | "none";
+
+export type WithRNTWProps<P, S extends {} = Style> = Omit<
+  P,
+  "style" | "variant"
+> & {
+  style?: StyleProp<S>;
+  variant?: VariantProp;
 };
 
-export const rntw = (theme: Theme, instructions: Instruction[]) => {
+export const rntw = (theme: Theme, tokens: Token[]) => {
   const { mode } = theme;
 
   const isThemeDark = mode === "dark";
@@ -21,7 +27,7 @@ export const rntw = (theme: Theme, instructions: Instruction[]) => {
 
   const styles = new Map<StyleStates, Style & { overrides: Style }>();
 
-  const asts = instructions.map(getAst);
+  const asts = tokens.map(getAst);
 
   asts.forEach((ast) => {
     const states = ast.states as StyleStates[];

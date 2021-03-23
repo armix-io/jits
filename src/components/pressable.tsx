@@ -48,13 +48,12 @@ export type { Props as PressableProps };
 
 export function Pressable(props: Props) {
   const {
-    className,
-    variant: _variant = "auto",
     style: styleProp,
+    variant: _variant = "auto",
     children,
     ...forward
   } = props;
-  const rntw = useRNTW();
+  const rntw = useRNTW(styleProp);
   const root = rntw(className);
   return (
     <RN.Pressable
