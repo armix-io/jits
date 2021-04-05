@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "outDir": "out",
+    "outDir": "dist",
     "target": "esnext",
     "module": "commonjs",
     "strict": true,
