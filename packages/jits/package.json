@@ -1,0 +1,27 @@
+{
+  "name": "@armix/jits",
+  "version": "0.0.0",
+  "author": "Armix <opensource@armix.io>",
+  "description": "Just-In-Time Styles utility inspired by TailwindCSS.",
+  "repository": "github:armix-io/jits",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "dev": "yarn clean && yarn watch",
+    "dev-init": "yalc publish",
+    "test": "jest --colors",
+    "test-debug": "node --inspect node_modules/.bin/jest --runInBand",
+    "clean": "rm -rf dist",
+    "build": "yarn build-pkg && yarn build-src",
+    "build-src": "tsc",
+    "build-pkg": "mkdir -p dist && cp package.json README.md dist",
+    "watch": "concurrently -k -n src,pkg yarn:watch-src yarn:watch-pkg",
+    "watch-src": "yarn build-src --watch",
+    "watch-pkg": "yarn build-pkg && nodemon --delay 500ms --watch dist --exec \"cd dist && yalc push --replace\""
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.0",
+    "nodemon": "^2.0.0"
+  }
+}

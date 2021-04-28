@@ -1,5 +1,5 @@
 import { Theme } from "./theme";
-import { Style, Instruction as Token, StyleType, StateVariant } from "./types";
+import { Style, Token, StyleType, StateVariant } from "./types";
 import { getAst } from "./get-ast";
 import { getAstStyle } from "./get-ast-style";
 import { getTypeGroups } from "./get-type-groups";

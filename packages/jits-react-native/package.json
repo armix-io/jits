@@ -1,0 +1,35 @@
+{
+  "name": "@armix/jits-react-native",
+  "version": "0.0.0",
+  "author": "Armix <opensource@armix.io>",
+  "description": "React Native integration for @armix/jits.",
+  "repository": "github:armix-io/jits",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "dev": "yarn clean && yarn watch",
+    "dev-init": "yalc publish",
+    "test": "jest",
+    "test-debug": "node --inspect node_modules/.bin/jest --runInBand",
+    "clean": "rm -rf dist",
+    "build": "yarn build-pkg && yarn build-src",
+    "build-src": "tsc",
+    "build-pkg": "mkdir -p dist && cp package.json README.md dist",
+    "watch": "concurrently -k -n src,pkg yarn:watch-src yarn:watch-pkg",
+    "watch-src": "yarn build-src --watch",
+    "watch-pkg": "yarn build-pkg && nodemon --delay 500ms --watch dist --exec \"cd dist && yalc push --replace\""
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "@types/react-native": "^0.64.0",
+    "concurrently": "^6.0.0",
+    "nodemon": "^2.0.0",
+    "react": "^17.0.0",
+    "react-native": "^0.64.0"
+  }
+}

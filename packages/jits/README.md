@@ -86,6 +86,16 @@ jits(
 // }
 ```
 
+### Conditional Style Objects
+
+```typescript
+jits(["uppercase", ["hover", ["text-blue-500", { paddingTop: 999 }]]]);
+// {
+//   root: { textTransform: "uppercase" } }
+//   hover: { color: "3b82f6", paddingTop: 999 } }
+// }
+```
+
 ### Custom Configuration
 
 ```typescript
