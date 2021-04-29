@@ -1,3 +1,3 @@
-export * from "./config/colors";
-export * from "./rntw";
+export * from "./create-jits";
+export * from "./jits";
 export * from "./types";

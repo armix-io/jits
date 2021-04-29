@@ -5,3 +5,6 @@ export * from "./style";
 export * from "./target";
 export * from "./utilities";
 export * from "./variants";
+export * from "./options";
+export * from "./spacing-scale";
+export * from "./maybe";

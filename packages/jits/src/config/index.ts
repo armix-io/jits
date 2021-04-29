@@ -1,1 +1,2 @@
-import * from "./default-options"
+export * from "./colors";
+export * from "./default-options";

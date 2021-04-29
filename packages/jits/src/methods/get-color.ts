@@ -2,7 +2,7 @@ import { Theme } from "./theme";
 import { Color } from "./types";
 import { maybe } from "./maybe";
 
-export const getColor = (theme: Theme, color: Color) => {
+export const getColor = (options: ) => (color: Color) => {
   const [$name, $scale] = color.split("-") as [string, string | undefined];
 
   const colorSetOrValue = maybe(theme.colors, $name);
