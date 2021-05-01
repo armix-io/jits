@@ -1,6 +1,6 @@
 import { Parse } from "../parse";
-import { Color, maybe } from "../../types";
-import { getColor } from "../../methods/get-color";
+import { maybe } from "../../types";
+import { Color, getColor, defaultColorMap } from "../../color";
 import { FontSizeMap, defaultFontSizeMap } from "./font-size-map";
 import { TextAlignMap, defaultTextAlignMap } from "./text-align-map";
 import {
@@ -21,16 +21,16 @@ export type Utility = `text-${
 
 export const ops = ["ltr", "rtl"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
-  const { op, value: $value } = ast;
+export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
+  const { value: $value } = ast;
 
   if (!$value) {
     throw requiresValue();
   }
 
-  const fontSize = maybe(defaultFontSizeMap, $value);
+  const fontSizeMap = config?.fontSizeMap ?? defaultFontSizeMap;
+
+  const fontSize = maybe(fontSizeMap, $value);
   if (fontSize !== undefined) {
     return { fontSize };
   }
@@ -50,7 +50,9 @@ export const parse: Parse = (options, { requiresValue, invalidValue }) => (
     return { writingDirection };
   }
 
-  const color = getColor(options)($value as Color);
+  const colorMap = config?.colorMap ?? defaultColorMap;
+
+  const color = getColor(colorMap)($value as Color);
   if (color) {
     return { color };
   }

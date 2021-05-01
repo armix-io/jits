@@ -1,6 +1,6 @@
 import { Parse } from "../parse";
-import { Axis, maybe, Side } from "../../types";
-import { getTarget } from "../../methods/get-target";
+import { maybe } from "../../types";
+import { Side, Axis, getTarget } from "../../target";
 import { SpacingMap, defaultSpacingMap } from "../spacing-map";
 
 export type Utility = `${"" | "-"}${"m" | "p"}${
@@ -9,9 +9,7 @@ export type Utility = `${"" | "-"}${"m" | "p"}${
 
 export const ops = ["m", "p"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
   const { op, target: $target, value: $value } = ast;
 
   if (!$value) {
@@ -20,8 +18,10 @@ export const parse: Parse = (options, { requiresValue, invalidValue }) => (
 
   const key = `${op === "m" ? "margin" : "padding"}${getTarget($target) || ""}`;
 
+  const spacingMap = config?.spacingMap ?? defaultSpacingMap;
+
   const sign = $value.startsWith("-") ? -1 : 1;
-  const value = maybe(defaultSpacingMap, $value.replace("-", ""));
+  const value = maybe(spacingMap, $value.replace("-", ""));
   if (value !== undefined) {
     return {
       [key]: value * sign,

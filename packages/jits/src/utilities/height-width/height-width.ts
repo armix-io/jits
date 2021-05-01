@@ -6,10 +6,8 @@ export type Utility = `${"h" | "w"}-${keyof SpacingMap}`;
 
 export const ops = ["h", "w"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
-  const { op, target: $target, value: $value } = ast;
+export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
+  const { op, value: $value } = ast;
 
   if (!$value) {
     throw requiresValue();
@@ -17,7 +15,9 @@ export const parse: Parse = (options, { requiresValue, invalidValue }) => (
 
   const key = op === "h" ? "height" : "width";
 
-  const value = maybe(defaultSpacingMap, $value.replace("-", ""));
+  const spacingMap = config?.spacingMap ?? defaultSpacingMap;
+
+  const value = maybe(spacingMap, $value.replace("-", ""));
   if (value !== undefined) {
     return {
       [key]: value,

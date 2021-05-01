@@ -4,7 +4,7 @@ export type Utility = "absolute" | "relative";
 
 export const ops = ["absolute", "relative"] as const;
 
-export const parse: Parse = () => (ast) => {
+export const parse: Parse = ({ ast }) => {
   const { op } = ast;
 
   return {

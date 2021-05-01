@@ -1,4 +1,3 @@
-import { defaultTheme } from "./theme";
 import { getColor } from "./get-color";
 
 test("correct root colors", () => {

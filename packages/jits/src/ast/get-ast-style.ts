@@ -1,8 +1,8 @@
+import { Config } from "../jits";
 import { AST } from "./get-ast";
-import { Options } from "../types";
 
 import {
-  Utility,
+  UtilitySchema,
   // utilities
   AbsoluteRelative,
   Aspect,
@@ -34,7 +34,7 @@ import {
   Z,
 } from "../utilities";
 
-const utilities: Utility[] = [
+const utilities: UtilitySchema[] = [
   AbsoluteRelative,
   Aspect,
   Bg,
@@ -65,19 +65,19 @@ const utilities: Utility[] = [
   Z,
 ];
 
-export const getAstStyle = (options: Options) => (ast: AST) => {
+export const getAstStyle = (config: Config) => (ast: AST) => {
   const { op, value: $value } = ast;
 
-  const requiresValue = () => new Error(`requires value, ${ast.__function}`);
+  const requiresValue = () => new Error(`requires value, ${ast.__utility}`);
   const invalidValue = () =>
-    new Error(`invalid value '${$value}', ${ast.__function}`);
-  const invalidOp = () => new Error(`invalid op '${op}', ${ast.__function}`);
+    new Error(`invalid value '${$value}', ${ast.__utility}`);
+  const invalidOp = () => new Error(`invalid op '${op}', ${ast.__utility}`);
 
-  const context = { requiresValue, invalidValue, invalidOp };
+  const context = { ast, config, requiresValue, invalidValue, invalidOp };
 
   for (const utility of utilities) {
     if (utility.test ? utility.test(op) : utility.ops.includes(op)) {
-      return utility.parse(options, context)(ast);
+      return utility.parse(context);
     }
   }
 

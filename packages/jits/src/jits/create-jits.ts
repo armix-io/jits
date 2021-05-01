@@ -1,21 +1,26 @@
-import { Op as Utility } from "./types";
-import { Options } from "./types";
+import { Utility } from "../utilities";
+import { Config } from "./config";
 
 export const createJits = <
   E extends readonly string[],
   V extends readonly string[],
-  O extends Options<E, V>
+  O extends Config<E, V>
 >(
-  defaultOptions: O
+  config: O
 ) => {
+  type Style = Record<string, any>;
   type Variants = O["envs"][number] | O["states"][number];
 
   /**
    * accepts:
    * ["utility"]
+   * ["style"]
    * ["utility", "utility"]
+   * ["utility", "style"]
    * ["utility", ["utility"]]
+   * ["utility", ["style"]]
    * ["utility", ["variant", "utility"]]
+   * ["utility", ["variant", "style"]]
    * ["utility", ["variant", ["utility", "utility"]]]
    * ["utility", ["variant", "variant", "utility"]]
    * ["utility", ["variant", "variant", ["utility"]]]
@@ -23,8 +28,12 @@ export const createJits = <
    */
 
   const jits = (
-    args: (Utility | Variants | Record<string, any> | [])[],
-    options: {}
+    args: (
+      | Utility
+      | Style
+      | (Utility | Variants | Style | (Utility | Style)[])[]
+    )[],
+    options: Record<Variants, boolean>
   ) => {
     return {};
   };

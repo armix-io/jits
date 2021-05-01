@@ -1,21 +1,20 @@
 import { Parse } from "../parse";
-import { Color } from "../../types";
-import { getColor } from "../../methods/get-color";
+import { Color, getColor, defaultColorMap } from "../../color";
 
-export type Utility = `${"bg"}-${Color}`;
+export type Utility = `bg-${Color}`;
 
 export const ops = ["bg"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
   const { value: $value } = ast;
 
   if (!$value) {
     throw requiresValue();
   }
 
-  const color = getColor(options)($value as Color);
+  const colorMap = config?.colorMap ?? defaultColorMap;
+
+  const color = getColor(colorMap)($value as Color);
   if (color !== undefined) {
     return {
       backgroundColor: color,

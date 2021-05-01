@@ -19,9 +19,5 @@
     "watch": "concurrently -k -n src,pkg yarn:watch-src yarn:watch-pkg",
     "watch-src": "yarn build-src --watch",
     "watch-pkg": "yarn build-pkg && nodemon --delay 500ms --watch dist --exec \"cd dist && yalc push --replace\""
-  },
-  "devDependencies": {
-    "concurrently": "^6.0.0",
-    "nodemon": "^2.0.0"
   }
 }

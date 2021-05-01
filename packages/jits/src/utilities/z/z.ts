@@ -6,10 +6,8 @@ export type Utility = `z-${keyof ZIndexMap}`;
 
 export const ops = ["opacity"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
-  const { target: $target, value: $value } = ast;
+export const parse: Parse = ({ ast, requiresValue, invalidValue }) => {
+  const { value: $value } = ast;
 
   if (!$value) {
     throw requiresValue();

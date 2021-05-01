@@ -1,7 +1,7 @@
 import { Parse } from "../parse";
-import { Corner, maybe, Side } from "../../types";
+import { maybe } from "../../types";
+import { Side, Corner, getTarget } from "../../target";
 import { BorderRadiusMap, defaultBorderRadiusMap } from "./border-radius-map";
-import { getTarget } from "../../methods/get-target";
 
 export type Utility = `rounded${
   | ""
@@ -11,11 +11,12 @@ export type Utility = `rounded${
 
 export const ops = ["opacity"] as const;
 
-export const parse: Parse = () => (ast) => {
+export const parse: Parse = ({ ast, config }) => {
   const { target: $target, value: $value } = ast;
 
-  const value =
-    maybe(defaultBorderRadiusMap, $value) ?? defaultBorderRadiusMap.DEFAULT;
+  const borderRadiusMap = config?.borderRadiusMap ?? defaultBorderRadiusMap;
+
+  const value = maybe(borderRadiusMap, $value) ?? borderRadiusMap.DEFAULT;
 
   if ($target === "l") {
     return {

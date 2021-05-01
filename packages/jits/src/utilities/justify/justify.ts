@@ -5,13 +5,11 @@ import {
   defaultJustifyContentMap,
 } from "./justify-content-map";
 
-export type Utility = `${"justify"}-${keyof JustifyContentMap}`;
+export type Utility = `justify-${keyof JustifyContentMap}`;
 
 export const ops = ["justify"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, requiresValue, invalidValue }) => {
   const { value: $value } = ast;
 
   if (!$value) {

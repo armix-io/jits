@@ -2,14 +2,18 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
+    
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
+    
+    "strict": true,
+    
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    
     "skipLibCheck": true,
     "removeComments": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true
   }
 }

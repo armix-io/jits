@@ -1,9 +1,9 @@
 import { Parse } from "../parse";
-import { Color, maybe, Side } from "../../types";
+import { maybe } from "../../types";
+import { Color, getColor, defaultColorMap } from "../../color";
+import { Side, getTarget } from "../../target";
 import { BorderStyleMap, defaultBorderStyleMap } from "./border-style-map";
 import { BorderWidthMap, defaultBorderWidthMap } from "./border-width-map";
-import { getColor } from "../../methods/get-color";
-import { getTarget } from "../../methods/get-target";
 
 export type Utility = `border${
   | ""
@@ -15,9 +15,7 @@ export type Utility = `border${
 
 export const ops = ["opacity"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, config, invalidValue }) => {
   const { target: $target, value: $value } = ast;
 
   const style = maybe(defaultBorderStyleMap, $value);
@@ -42,7 +40,9 @@ export const parse: Parse = (options, { requiresValue, invalidValue }) => (
     };
   }
 
-  const color = getColor(options)($value as Color);
+  const colorMap = config?.colorMap ?? defaultColorMap;
+
+  const color = getColor(colorMap)($value as Color);
   if (color !== undefined) {
     return {
       [`${key}Color`]: color,

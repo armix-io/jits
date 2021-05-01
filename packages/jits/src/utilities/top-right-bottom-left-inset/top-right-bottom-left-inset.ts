@@ -1,6 +1,6 @@
 import { Parse } from "../parse";
-import { Axis, maybe } from "../../types";
-import { getTarget } from "../../methods/get-target";
+import { maybe } from "../../types";
+import { Axis, getTarget } from "../../target";
 import { SpacingMap, defaultSpacingMap } from "../spacing-map";
 
 export type Utility =
@@ -23,17 +23,17 @@ export const ops = [
   "inset",
 ] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
   const { op, target: $target, value: $value } = ast;
 
   if (!$value) {
     throw requiresValue();
   }
 
+  const spacingMap = config?.spacingMap ?? defaultSpacingMap;
+
   const sign = $value.startsWith("-") ? -1 : 1;
-  const valueRaw = maybe(defaultSpacingMap, $value.replace("-", ""));
+  const valueRaw = maybe(spacingMap, $value.replace("-", ""));
 
   if (valueRaw === undefined) {
     throw invalidValue();

@@ -1,21 +1,20 @@
 import { Parse } from "../parse";
-import { Color } from "../../types";
-import { getColor } from "../../methods/get-color";
+import { Color, getColor, defaultColorMap } from "../../color";
 
 export type Utility = `tint-${Color}`;
 
 export const ops = ["tint"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
   const { value: $value } = ast;
 
   if (!$value) {
     throw requiresValue();
   }
 
-  const tintColor = getColor(options)($value as Color);
+  const colorMap = config?.colorMap ?? defaultColorMap;
+
+  const tintColor = getColor(colorMap)($value as Color);
   if (tintColor !== undefined) {
     return { tintColor };
   }

@@ -1,5 +1,3 @@
-import { ContextVariant, Instruction, Op, StateVariant } from "./types";
-
 const ops = [
   // margin/padding/height/width
   "(?:m|p)(\\w*)",
@@ -47,40 +45,10 @@ const reOpTargetValue = new RegExp(
   )})(?:-((?:(?:t|b)?(?:l|r|s|e)?|x|y)))?(?:-(.*(?:-.*)*)+)?$`
 );
 
-/**
- * contexts are in-built features
- * any decorator that is not a context is a state
- */
-const matchContexts = ["dark", "ios", "android"];
-
-export function getAst(instruction: Instruction) {
-  // if array clone it as to not mutate incoming instruction
-  const $instruction =
-    typeof instruction === "string" ? instruction : [...instruction];
-
-  // empty string or empty array
-  if (!$instruction.length) {
-    throw new Error(`empty instruction`);
-  }
-
-  // fn is string or last element of array
-  const fn =
-    typeof $instruction === "string"
-      ? $instruction
-      : ($instruction.pop() as Op);
-  // decorators are everything left over after pop, or empty if string
-  const decorators =
-    typeof $instruction === "string"
-      ? []
-      : ($instruction as (ContextVariant | StateVariant)[]);
-
-  const matchOpTargetValue = fn.match(reOpTargetValue);
+export function getAst(utility: string) {
+  const matchOpTargetValue = utility.match(reOpTargetValue);
   if (!matchOpTargetValue) {
-    throw new Error(
-      `invalid function '${fn}', ${
-        decorators.length ? `(${decorators.join(",")})` : ""
-      }`
-    );
+    throw new Error(`invalid function '${utility}'`);
   }
 
   const [, $sign, $op, $optarget, $target, $value] = matchOpTargetValue;
@@ -92,26 +60,11 @@ export function getAst(instruction: Instruction) {
 
   const value = $value ? `${$sign || ""}${$value}` : undefined;
 
-  const states: StateVariant[] = [];
-
-  const contexts: ContextVariant[] = [];
-
-  for (const decorator of decorators) {
-    if (matchContexts.includes(decorator)) {
-      contexts.push(decorator as ContextVariant);
-    } else {
-      states.push(decorator as StateVariant);
-    }
-  }
-
   return {
     op,
     target,
     value,
-    states,
-    contexts,
-    __function: fn,
-    __instruction: instruction,
+    __utility: utility,
   };
 }
 

@@ -1,6 +1,6 @@
 import { Parse } from "../parse";
-import { maybe, Color } from "../../types";
-import { getColor } from "../../methods/get-color";
+import { maybe } from "../../types";
+import { Color, getColor, defaultColorMap } from "../../color";
 import {
   TextDecorationLineMap,
   defaultTextDecorationLineMap,
@@ -18,9 +18,7 @@ export const ops = ["underline", "line-through", "no-underline"] as const;
 
 export const test = (op: any) => op.startsWith("underline") || ops.includes(op);
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, config, invalidValue, invalidOp }) => {
   const { op, value: $value } = ast;
 
   if (op.startsWith("underline")) {
@@ -33,7 +31,9 @@ export const parse: Parse = (options, { requiresValue, invalidValue }) => (
       return { textDecorationStyle };
     }
 
-    const textDecorationColor = getColor(options)($value as Color);
+    const colorMap = config?.colorMap ?? defaultColorMap;
+
+    const textDecorationColor = getColor(colorMap)($value as Color);
     if (textDecorationColor !== undefined) {
       return { textDecorationColor };
     }
@@ -43,7 +43,10 @@ export const parse: Parse = (options, { requiresValue, invalidValue }) => (
 
   if (op === "line-through" || op === "no-underline") {
     return {
-      textDecorationLine: defaultTextDecorationLineMap[op],
+      textDecorationLine:
+        defaultTextDecorationLineMap[op as keyof TextDecorationLineMap],
     };
   }
+
+  throw invalidOp();
 };

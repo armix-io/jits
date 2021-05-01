@@ -27,8 +27,6 @@
   "devDependencies": {
     "@types/react": "^17.0.0",
     "@types/react-native": "^0.64.0",
-    "concurrently": "^6.0.0",
-    "nodemon": "^2.0.0",
     "react": "^17.0.0",
     "react-native": "^0.64.0"
   }

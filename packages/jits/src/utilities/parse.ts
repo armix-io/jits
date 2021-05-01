@@ -1,13 +1,12 @@
-import { Options } from "../types";
-import { AST } from "../methods/get-ast";
+import { Config } from "../jits";
+import { AST } from "../ast/get-ast";
 
 export interface Parse {
-  (
-    options: Options,
-    context: {
-      requiresValue: () => void;
-      invalidValue: () => void;
-      invalidOp: () => void;
-    }
-  ): (ast: AST) => Record<string, any>;
+  (context: {
+    ast: AST;
+    config?: Config;
+    invalidOp: () => void;
+    invalidValue: () => void;
+    requiresValue: () => void;
+  }): Record<string, any>;
 }

@@ -13,12 +13,10 @@ export const ops = [
   "normal-case",
 ] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast }) => {
   const { op } = ast;
 
   return {
-    textTransform: defaultTextTransformMap[op],
+    textTransform: defaultTextTransformMap[op as typeof ops[number]],
   };
 };

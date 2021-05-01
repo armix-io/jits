@@ -6,16 +6,16 @@ export type Utility = `tracking-${keyof TrackingMap}`;
 
 export const ops = ["tracking"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
   const { value: $value } = ast;
 
   if (!$value) {
     throw requiresValue();
   }
 
-  const letterSpacing = maybe(defaultTrackingMap, $value);
+  const trackingMap = config?.trackingMap ?? defaultTrackingMap;
+
+  const letterSpacing = maybe(trackingMap, $value);
   if (letterSpacing !== undefined) {
     return { letterSpacing };
   }

@@ -7,9 +7,7 @@ export type Utility = `font-${keyof FontWeightMap | keyof FontMap}`;
 
 export const ops = ["font"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
   const { value: $value } = ast;
 
   if (!$value) {
@@ -21,7 +19,9 @@ export const parse: Parse = (options, { requiresValue, invalidValue }) => (
     return { fontWeight };
   }
 
-  const fontFamily = maybe(defaultFontMap, $value);
+  const fontMap = config?.fontMap ?? defaultFontMap;
+
+  const fontFamily = maybe(fontMap, $value);
   if (fontFamily !== undefined) {
     return { fontFamily };
   }

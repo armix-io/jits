@@ -6,9 +6,7 @@ export type Utility = `${"content"}-${keyof AlignContentMap}`;
 
 export const ops = ["content"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, requiresValue, invalidValue }) => {
   const { value: $value } = ast;
 
   if (!$value) {

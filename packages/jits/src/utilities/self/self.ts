@@ -6,9 +6,7 @@ export type Utility = `${"self"}-${keyof AlignSelfMap}`;
 
 export const ops = ["self"] as const;
 
-export const parse: Parse = (options, { requiresValue, invalidValue }) => (
-  ast
-) => {
+export const parse: Parse = ({ ast, requiresValue, invalidValue }) => {
   const { value: $value } = ast;
 
   if (!$value) {

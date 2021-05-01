@@ -29,5 +29,6 @@ export * from "./z";
 
 export * from "./parse";
 export * from "./utility";
+export * from "./utility-schema";
 
 export * from "./spacing-map";

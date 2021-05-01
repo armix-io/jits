@@ -20,7 +20,7 @@ export const ops = ["flex"] as const;
 
 export const test = (op: any) => ops.includes(op) || op.startsWith("flex");
 
-export const parse: Parse = (options, { invalidValue, invalidOp }) => (ast) => {
+export const parse: Parse = ({ ast, invalidValue, invalidOp }) => {
   const { op, value: $value } = ast;
 
   if (op === "flex") {
