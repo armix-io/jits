@@ -66,6 +66,6 @@ export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
   const key = `${op}${getTarget($target) || ""}`;
 
   return {
-    [key]: value * sign,
+    [key]: value,
   };
 };

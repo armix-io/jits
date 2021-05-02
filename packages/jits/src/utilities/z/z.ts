@@ -4,7 +4,7 @@ import { ZIndexMap, defaultZIndexMap } from "./z-index-map";
 
 export type Utility = `z-${keyof ZIndexMap}`;
 
-export const ops = ["opacity"] as const;
+export const ops = ["z"] as const;
 
 export const parse: Parse = ({ ast, requiresValue, invalidValue }) => {
   const { value: $value } = ast;

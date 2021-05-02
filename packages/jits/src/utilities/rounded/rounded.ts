@@ -9,7 +9,7 @@ export type Utility = `rounded${
       | ""
       | `-${Exclude<keyof BorderRadiusMap, "DEFAULT">}`}`}`;
 
-export const ops = ["opacity"] as const;
+export const ops = ["rounded"] as const;
 
 export const parse: Parse = ({ ast, config }) => {
   const { target: $target, value: $value } = ast;

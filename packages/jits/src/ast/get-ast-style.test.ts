@@ -1,3 +1,4 @@
+import { defaultConfig } from "../jits";
 import { getAst } from "./get-ast";
 import { getAstStyle } from "./get-ast-style";
 import {
@@ -16,387 +17,380 @@ import {
   defaultTrackingMap,
   defaultTextDecorationStyleMap,
 } from "../utilities";
-import { defaultOptions } from "../config";
 
 test("margin styles", () => {
-  expect(getAstStyle(defaultOptions)(getAst("m-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("m-0"))).toMatchObject({
     margin: defaultSpacingMap[0],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("m-2"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("m-2"))).toMatchObject({
     margin: defaultSpacingMap[2],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("my-2"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("my-2"))).toMatchObject({
     marginVertical: defaultSpacingMap[2],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("ml-0.5"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("ml-0.5"))).toMatchObject({
     marginLeft: defaultSpacingMap["0.5"],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("-m-1"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("-m-1"))).toMatchObject({
     margin: -defaultSpacingMap[1],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("-mx-4"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("-mx-4"))).toMatchObject({
     marginHorizontal: -defaultSpacingMap[4],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("-mr-8"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("-mr-8"))).toMatchObject({
     marginRight: -defaultSpacingMap[8],
   });
 });
 
 test("padding styles", () => {
-  expect(getAstStyle(defaultOptions)(getAst("p-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("p-0"))).toMatchObject({
     padding: defaultSpacingMap[0],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("p-2"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("p-2"))).toMatchObject({
     padding: defaultSpacingMap[2],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("py-2"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("py-2"))).toMatchObject({
     paddingVertical: defaultSpacingMap[2],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("pl-0.5"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("pl-0.5"))).toMatchObject({
     paddingLeft: defaultSpacingMap["0.5"],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("-p-1"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("-p-1"))).toMatchObject({
     padding: -defaultSpacingMap[1],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("-px-4"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("-px-4"))).toMatchObject({
     paddingHorizontal: -defaultSpacingMap[4],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("-pr-8"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("-pr-8"))).toMatchObject({
     paddingRight: -defaultSpacingMap[8],
   });
 });
 
 test("top,bottom,left,right,start,end props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("top-0"))).toMatchObject({
-    top: defaultSpacingMap[0],
-  });
-  expect(getAstStyle(defaultOptions)(getAst("bottom-12"))).toMatchObject({
+  // expect(getAstStyle(defaultConfig)(getAst("top-0"))).toMatchObject({
+  //   top: defaultSpacingMap[0],
+  // });
+  expect(getAstStyle(defaultConfig)(getAst("bottom-12"))).toMatchObject({
     bottom: defaultSpacingMap[12],
   });
-  expect(getAstStyle(defaultOptions)(getAst("left-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("left-0"))).toMatchObject({
     left: defaultSpacingMap[0],
   });
-  expect(getAstStyle(defaultOptions)(getAst("right-4"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("right-4"))).toMatchObject({
     right: defaultSpacingMap[4],
   });
-  expect(getAstStyle(defaultOptions)(getAst("-start-8"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("-start-8"))).toMatchObject({
     start: -defaultSpacingMap[8],
   });
-  expect(getAstStyle(defaultOptions)(getAst("-end-24"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("-end-24"))).toMatchObject({
     end: -defaultSpacingMap[24],
   });
 });
 
 test("height and width props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("h-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("h-0"))).toMatchObject({
     height: defaultSpacingMap[0],
   });
-  expect(getAstStyle(defaultOptions)(getAst("w-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("w-0"))).toMatchObject({
     width: defaultSpacingMap[0],
   });
-  expect(getAstStyle(defaultOptions)(getAst("h-32"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("h-32"))).toMatchObject({
     height: defaultSpacingMap[32],
   });
-  expect(getAstStyle(defaultOptions)(getAst("w-96"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("w-96"))).toMatchObject({
     width: defaultSpacingMap[96],
   });
 });
 
 test("overflow props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("overflow-visible"))).toMatchObject(
-    {
-      overflow: "visible",
-    }
-  );
-  expect(getAstStyle(defaultOptions)(getAst("overflow-hidden"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("overflow-visible"))).toMatchObject({
+    overflow: "visible",
+  });
+  expect(getAstStyle(defaultConfig)(getAst("overflow-hidden"))).toMatchObject({
     overflow: "hidden",
   });
-  expect(getAstStyle(defaultOptions)(getAst("overflow-scroll"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("overflow-scroll"))).toMatchObject({
     overflow: "scroll",
   });
 });
 
 test("display props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("flex"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex"))).toMatchObject({
     display: "flex",
   });
-  expect(getAstStyle(defaultOptions)(getAst("hidden"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("hidden"))).toMatchObject({
     display: "none",
   });
 });
 
 test("flex props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("flex"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex"))).toMatchObject({
     display: "flex",
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-0"))).toMatchObject({
     flex: 0,
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-1"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-1"))).toMatchObject({
     flex: 1,
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-2"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-2"))).toMatchObject({
     flex: 2,
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-auto"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-auto"))).toMatchObject({
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: "auto",
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-initial"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-initial"))).toMatchObject({
     flexGrow: 0,
     flexShrink: 1,
     flexBasis: "auto",
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-none"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-none"))).toMatchObject({
     flexGrow: 0,
     flexShrink: 0,
     flexBasis: "auto",
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-row"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-row"))).toMatchObject({
     flexDirection: "row",
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-row-reverse"))).toMatchObject(
-    {
-      flexDirection: "row-reverse",
-    }
-  );
-  expect(getAstStyle(defaultOptions)(getAst("flex-col-reverse"))).toMatchObject(
-    {
-      flexDirection: "column-reverse",
-    }
-  );
-  expect(getAstStyle(defaultOptions)(getAst("flex-grow"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-row-reverse"))).toMatchObject({
+    flexDirection: "row-reverse",
+  });
+  expect(getAstStyle(defaultConfig)(getAst("flex-col-reverse"))).toMatchObject({
+    flexDirection: "column-reverse",
+  });
+  expect(getAstStyle(defaultConfig)(getAst("flex-grow"))).toMatchObject({
     flexGrow: 1,
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-grow-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-grow-0"))).toMatchObject({
     flexGrow: 0,
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-shrink"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-shrink"))).toMatchObject({
     flexShrink: 1,
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-shrink-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-shrink-0"))).toMatchObject({
     flexShrink: 0,
   });
-  expect(getAstStyle(defaultOptions)(getAst("flex-wrap"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-wrap"))).toMatchObject({
     flexWrap: "wrap",
   });
-  expect(
-    getAstStyle(defaultOptions)(getAst("flex-wrap-reverse"))
-  ).toMatchObject({
-    flexWrap: "wrap-reverse",
-  });
-  expect(getAstStyle(defaultOptions)(getAst("flex-nowrap"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("flex-wrap-reverse"))).toMatchObject(
+    {
+      flexWrap: "wrap-reverse",
+    }
+  );
+  expect(getAstStyle(defaultConfig)(getAst("flex-nowrap"))).toMatchObject({
     flexWrap: "nowrap",
   });
 });
 
 test("flex align self items content and justify content", () => {
-  expect(getAstStyle(defaultOptions)(getAst("items-start"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("items-start"))).toMatchObject({
     alignItems: defaultAlignItemsMap.start,
   });
-  expect(getAstStyle(defaultOptions)(getAst("items-center"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("items-center"))).toMatchObject({
     alignItems: defaultAlignItemsMap.center,
   });
-  expect(getAstStyle(defaultOptions)(getAst("self-stretch"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("self-stretch"))).toMatchObject({
     alignSelf: defaultAlignSelfMap.stretch,
   });
-  expect(getAstStyle(defaultOptions)(getAst("content-center"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("content-center"))).toMatchObject({
     alignContent: defaultAlignContentMap.center,
   });
-  expect(getAstStyle(defaultOptions)(getAst("content-between"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("content-between"))).toMatchObject({
     alignContent: defaultAlignContentMap.between,
   });
-  expect(getAstStyle(defaultOptions)(getAst("justify-end"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("justify-end"))).toMatchObject({
     justifyContent: defaultJustifyContentMap.end,
   });
-  expect(getAstStyle(defaultOptions)(getAst("justify-center"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("justify-center"))).toMatchObject({
     justifyContent: defaultJustifyContentMap.center,
   });
 });
 
 test("bg color props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("bg-white"))).toMatchObject({
-    backgroundColor: defaultOptions.colors.white,
+  expect(getAstStyle(defaultConfig)(getAst("bg-white"))).toMatchObject({
+    backgroundColor: defaultConfig.colorMap.white,
   });
-  expect(getAstStyle(defaultOptions)(getAst("bg-transparent"))).toMatchObject({
-    backgroundColor: defaultOptions.colors.transparent,
+  expect(getAstStyle(defaultConfig)(getAst("bg-transparent"))).toMatchObject({
+    backgroundColor: defaultConfig.colorMap.transparent,
   });
-  expect(getAstStyle(defaultOptions)(getAst("bg-green-100"))).toMatchObject({
-    backgroundColor: defaultOptions.colors.green[100],
+  expect(getAstStyle(defaultConfig)(getAst("bg-green-100"))).toMatchObject({
+    backgroundColor: defaultConfig.colorMap.green[100],
   });
-  expect(getAstStyle(defaultOptions)(getAst("bg-blue-800"))).toMatchObject({
-    backgroundColor: defaultOptions.colors.blue[800],
+  expect(getAstStyle(defaultConfig)(getAst("bg-blue-800"))).toMatchObject({
+    backgroundColor: defaultConfig.colorMap.blue[800],
   });
 });
 
 test("opacity props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("opacity-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("opacity-0"))).toMatchObject({
     opacity: defaultOpacityMap[0],
   });
-  expect(getAstStyle(defaultOptions)(getAst("opacity-30"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("opacity-30"))).toMatchObject({
     opacity: defaultOpacityMap[30],
   });
-  expect(getAstStyle(defaultOptions)(getAst("opacity-95"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("opacity-95"))).toMatchObject({
     opacity: defaultOpacityMap[95],
   });
-  expect(getAstStyle(defaultOptions)(getAst("opacity-100"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("opacity-100"))).toMatchObject({
     opacity: defaultOpacityMap[100],
   });
 });
 
 test("border ast styles correct", () => {
-  expect(getAstStyle(defaultOptions)(getAst("border"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("border"))).toMatchObject({
     borderWidth: defaultBorderWidthMap.DEFAULT,
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("border-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("border-0"))).toMatchObject({
     borderWidth: defaultBorderWidthMap[0],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("border-2"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("border-2"))).toMatchObject({
     borderWidth: defaultBorderWidthMap[2],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("border-r"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("border-r"))).toMatchObject({
     borderRightWidth: defaultBorderWidthMap.DEFAULT,
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("border-t-4"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("border-t-4"))).toMatchObject({
     borderTopWidth: defaultBorderWidthMap[4],
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("border-dotted"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("border-dotted"))).toMatchObject({
     borderStyle: defaultBorderStyleMap.dotted,
   });
 
-  expect(getAstStyle(defaultOptions)(getAst("border-red-500"))).toMatchObject({
-    borderColor: defaultOptions.colors.red[500],
+  expect(getAstStyle(defaultConfig)(getAst("border-red-500"))).toMatchObject({
+    borderColor: defaultConfig.colorMap.red[500],
   });
 
   expect(
-    getAstStyle(defaultOptions)(getAst("border-t-green-100"))
+    getAstStyle(defaultConfig)(getAst("border-t-green-100"))
   ).toMatchObject({
-    borderTopColor: defaultOptions.colors.green[100],
+    borderTopColor: defaultConfig.colorMap.green[100],
   });
 });
 
 test("rounded props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("rounded"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("rounded"))).toMatchObject({
     borderRadius: defaultBorderRadiusMap.DEFAULT,
   });
-  expect(getAstStyle(defaultOptions)(getAst("rounded-none"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("rounded-none"))).toMatchObject({
     borderRadius: defaultBorderRadiusMap.none,
   });
-  expect(getAstStyle(defaultOptions)(getAst("rounded-xl"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("rounded-xl"))).toMatchObject({
     borderRadius: defaultBorderRadiusMap.xl,
   });
-  expect(getAstStyle(defaultOptions)(getAst("rounded-tr-xl"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("rounded-tr-xl"))).toMatchObject({
     borderTopRightRadius: defaultBorderRadiusMap.xl,
   });
-  expect(getAstStyle(defaultOptions)(getAst("rounded-l-md"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("rounded-l-md"))).toMatchObject({
     borderTopLeftRadius: defaultBorderRadiusMap.md,
     borderBottomLeftRadius: defaultBorderRadiusMap.md,
   });
 });
 
 test("position props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("absolute"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("absolute"))).toMatchObject({
     position: "absolute",
   });
-  expect(getAstStyle(defaultOptions)(getAst("relative"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("relative"))).toMatchObject({
     position: "relative",
   });
 });
 
 test("z-index props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("z-0"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("z-0"))).toMatchObject({
     zIndex: 0,
   });
-  expect(getAstStyle(defaultOptions)(getAst("z-30"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("z-30"))).toMatchObject({
     zIndex: 30,
   });
 });
 
 test("shadow props", () => {
-  // expect(getAstStyle(defaultOptions)(getAst("border"))).toMatchObject({
+  // expect(getAstStyle(defaultConfig)(getAst("border"))).toMatchObject({
   //   borderWidth: defaultBorderWidthMap.DEFAULT,
   // });
 });
 
 test("aspect props", () => {
-  // expect(getAstStyle(defaultOptions)(getAst("border"))).toMatchObject({
+  // expect(getAstStyle(defaultConfig)(getAst("border"))).toMatchObject({
   //   borderWidth: defaultBorderWidthMap.DEFAULT,
   // });
 });
 
 test("ltr and rtl props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("ltr"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("ltr"))).toMatchObject({
     direction: "ltr",
   });
-  expect(getAstStyle(defaultOptions)(getAst("rtl"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("rtl"))).toMatchObject({
     direction: "rtl",
   });
 });
 
 test("text props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("text-xl"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-xl"))).toMatchObject({
     fontSize: defaultFontSizeMap.xl,
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-base"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-base"))).toMatchObject({
     fontSize: defaultFontSizeMap.base,
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-white"))).toMatchObject({
-    color: defaultOptions.colors.white,
+  expect(getAstStyle(defaultConfig)(getAst("text-white"))).toMatchObject({
+    color: defaultConfig.colorMap.white,
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-red-400"))).toMatchObject({
-    color: defaultOptions.colors.red[400],
+  expect(getAstStyle(defaultConfig)(getAst("text-red-400"))).toMatchObject({
+    color: defaultConfig.colorMap.red[400],
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-ltr"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-ltr"))).toMatchObject({
     writingDirection: "ltr",
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-rtl"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-rtl"))).toMatchObject({
     writingDirection: "rtl",
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-left"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-left"))).toMatchObject({
     textAlign: "left",
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-center"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-center"))).toMatchObject({
     textAlign: "center",
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-justify"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-justify"))).toMatchObject({
     textAlign: "justify",
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-top"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-top"))).toMatchObject({
     textAlignVertical: "top",
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-middle"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-middle"))).toMatchObject({
     textAlignVertical: "center",
   });
-  expect(getAstStyle(defaultOptions)(getAst("text-auto"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("text-auto"))).toMatchObject({
     textAlignVertical: "auto",
   });
 });
 
 test("font props", () => {
-  const _defaultTheme = { ...defaultOptions, os: "ios" as const };
+  const _defaultTheme = { ...defaultConfig, os: "ios" as const };
   expect(getAstStyle(_defaultTheme)(getAst("font-sans"))).toMatchObject({
-    fontFamily: _defaultTheme.fonts.sans,
+    fontFamily: _defaultTheme.fontMap.sans,
   });
   expect(getAstStyle(_defaultTheme)(getAst("font-mono"))).toMatchObject({
-    fontFamily: _defaultTheme.fonts.mono,
+    fontFamily: _defaultTheme.fontMap.mono,
   });
   expect(getAstStyle(_defaultTheme)(getAst("font-thin"))).toMatchObject({
     fontWeight: defaultFontWeightMap.thin,
@@ -410,110 +404,104 @@ test("font props", () => {
 });
 
 test("italic|non-italic props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("italic"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("italic"))).toMatchObject({
     fontStyle: "italic",
   });
-  expect(getAstStyle(defaultOptions)(getAst("non-italic"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("non-italic"))).toMatchObject({
     fontStyle: "normal",
   });
 });
 
 test("tracking", () => {
-  expect(getAstStyle(defaultOptions)(getAst("tracking-normal"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("tracking-normal"))).toMatchObject({
     letterSpacing: defaultTrackingMap.normal,
   });
-  expect(getAstStyle(defaultOptions)(getAst("tracking-widest"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("tracking-widest"))).toMatchObject({
     letterSpacing: defaultTrackingMap.widest,
   });
 });
 
 test("leading", () => {
-  expect(getAstStyle(defaultOptions)(getAst("leading-4"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("leading-4"))).toMatchObject({
     lineHeight: defaultLeadingMap[4],
   });
-  expect(getAstStyle(defaultOptions)(getAst("leading-9"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("leading-9"))).toMatchObject({
     lineHeight: defaultLeadingMap[9],
   });
-  expect(getAstStyle(defaultOptions)(getAst("leading-none"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("leading-none"))).toMatchObject({
     lineHeight: defaultLeadingMap.none,
   });
-  expect(getAstStyle(defaultOptions)(getAst("leading-loose"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("leading-loose"))).toMatchObject({
     lineHeight: defaultLeadingMap.loose,
   });
 });
 
 test("text upper/lower/caps/normal props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("uppercase"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("uppercase"))).toMatchObject({
     textTransform: "uppercase",
   });
-  expect(getAstStyle(defaultOptions)(getAst("normal-case"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("normal-case"))).toMatchObject({
     textTransform: "none",
   });
-  expect(getAstStyle(defaultOptions)(getAst("lowercase"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("lowercase"))).toMatchObject({
     textTransform: "lowercase",
   });
-  expect(getAstStyle(defaultOptions)(getAst("capitalize"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("capitalize"))).toMatchObject({
     textTransform: "capitalize",
   });
 });
 
 test("underline props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("underline"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("underline"))).toMatchObject({
     textDecorationLine: "underline",
   });
-  expect(
-    getAstStyle(defaultOptions)(getAst("underline-red-400"))
-  ).toMatchObject({
-    textDecorationColor: defaultOptions.colors.red[400],
-  });
-  expect(getAstStyle(defaultOptions)(getAst("underline-white"))).toMatchObject({
-    textDecorationColor: defaultOptions.colors.white,
-  });
-  expect(getAstStyle(defaultOptions)(getAst("underline-solid"))).toMatchObject({
-    textDecorationStyle: defaultTextDecorationStyleMap.solid,
-  });
-  expect(getAstStyle(defaultOptions)(getAst("underline-dotted"))).toMatchObject(
+  expect(getAstStyle(defaultConfig)(getAst("underline-red-400"))).toMatchObject(
     {
-      textDecorationStyle: defaultTextDecorationStyleMap.dotted,
+      textDecorationColor: defaultConfig.colorMap.red[400],
     }
   );
+  expect(getAstStyle(defaultConfig)(getAst("underline-white"))).toMatchObject({
+    textDecorationColor: defaultConfig.colorMap.white,
+  });
+  expect(getAstStyle(defaultConfig)(getAst("underline-solid"))).toMatchObject({
+    textDecorationStyle: defaultTextDecorationStyleMap.solid,
+  });
+  expect(getAstStyle(defaultConfig)(getAst("underline-dotted"))).toMatchObject({
+    textDecorationStyle: defaultTextDecorationStyleMap.dotted,
+  });
 });
 
 test("other text decorations props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("line-through"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("line-through"))).toMatchObject({
     textDecorationLine: "line-through",
   });
-  expect(getAstStyle(defaultOptions)(getAst("no-underline"))).toMatchObject({
+  expect(getAstStyle(defaultConfig)(getAst("no-underline"))).toMatchObject({
     textDecorationLine: "none",
   });
 });
 
 test("tint props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("tint-white"))).toMatchObject({
-    tintColor: defaultOptions.colors.white,
+  expect(getAstStyle(defaultConfig)(getAst("tint-white"))).toMatchObject({
+    tintColor: defaultConfig.colorMap.white,
   });
-  expect(getAstStyle(defaultOptions)(getAst("tint-transparent"))).toMatchObject(
-    {
-      tintColor: defaultOptions.colors.transparent,
-    }
-  );
-  expect(getAstStyle(defaultOptions)(getAst("tint-blue-200"))).toMatchObject({
-    tintColor: defaultOptions.colors.blue[200],
+  expect(getAstStyle(defaultConfig)(getAst("tint-transparent"))).toMatchObject({
+    tintColor: defaultConfig.colorMap.transparent,
+  });
+  expect(getAstStyle(defaultConfig)(getAst("tint-blue-200"))).toMatchObject({
+    tintColor: defaultConfig.colorMap.blue[200],
   });
 });
 
 test("overlay props", () => {
-  expect(getAstStyle(defaultOptions)(getAst("overlay-white"))).toMatchObject({
-    overlayColor: defaultOptions.colors.white,
+  expect(getAstStyle(defaultConfig)(getAst("overlay-white"))).toMatchObject({
+    overlayColor: defaultConfig.colorMap.white,
   });
   expect(
-    getAstStyle(defaultOptions)(getAst("overlay-transparent"))
+    getAstStyle(defaultConfig)(getAst("overlay-transparent"))
   ).toMatchObject({
-    overlayColor: defaultOptions.colors.transparent,
+    overlayColor: defaultConfig.colorMap.transparent,
   });
-  expect(getAstStyle(defaultOptions)(getAst("overlay-blue-200"))).toMatchObject(
-    {
-      overlayColor: defaultOptions.colors.blue[200],
-    }
-  );
+  expect(getAstStyle(defaultConfig)(getAst("overlay-blue-200"))).toMatchObject({
+    overlayColor: defaultConfig.colorMap.blue[200],
+  });
 });

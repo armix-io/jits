@@ -13,7 +13,7 @@ export type Utility = `border${
       | `-${Exclude<keyof BorderWidthMap, "DEFAULT">}`
       | `-${Color}`}`}`;
 
-export const ops = ["opacity"] as const;
+export const ops = ["border"] as const;
 
 export const parse: Parse = ({ ast, config, invalidValue }) => {
   const { target: $target, value: $value } = ast;

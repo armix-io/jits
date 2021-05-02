@@ -1,19 +1,18 @@
+import { defaultColorMap } from "./color-map";
 import { getColor } from "./get-color";
 
 test("correct root colors", () => {
-  expect(getColor(defaultTheme, "transparent")).toBe(
-    defaultTheme.colors.transparent
+  expect(getColor(defaultColorMap)("transparent")).toBe(
+    defaultColorMap.transparent
   );
-  expect(getColor(defaultTheme, "white")).toBe(defaultTheme.colors.white);
-  expect(getColor(defaultTheme, "black")).toBe(defaultTheme.colors.black);
+  expect(getColor(defaultColorMap)("white")).toBe(defaultColorMap.white);
+  expect(getColor(defaultColorMap)("black")).toBe(defaultColorMap.black);
 });
 
 test("correct scaled colors", () => {
-  expect(getColor(defaultTheme, "red-200")).toBe(defaultTheme.colors.red[200]);
-  expect(getColor(defaultTheme, "green-500")).toBe(
-    defaultTheme.colors.green[500]
+  expect(getColor(defaultColorMap)("red-200")).toBe(defaultColorMap.red[200]);
+  expect(getColor(defaultColorMap)("green-500")).toBe(
+    defaultColorMap.green[500]
   );
-  expect(getColor(defaultTheme, "blue-900")).toBe(
-    defaultTheme.colors.blue[900]
-  );
+  expect(getColor(defaultColorMap)("blue-900")).toBe(defaultColorMap.blue[900]);
 });

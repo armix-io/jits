@@ -25,7 +25,7 @@ export const parse: Parse = ({ ast, invalidValue, invalidOp }) => {
 
   if (op === "flex") {
     if (!$value) {
-      throw {
+      return {
         display: "flex",
       };
     }

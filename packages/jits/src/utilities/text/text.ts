@@ -19,7 +19,7 @@ export type Utility = `text-${
   | keyof WritingDirectionMap
   | Color}`;
 
-export const ops = ["ltr", "rtl"] as const;
+export const ops = ["text"] as const;
 
 export const parse: Parse = ({ ast, config, requiresValue, invalidValue }) => {
   const { value: $value } = ast;
