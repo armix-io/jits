@@ -7,8 +7,10 @@
     "packages/*"
   ],
   "scripts": {
+    "diff": "lerna diff",
     "test": "lerna run test",
-    "diff": "lerna diff"
+    "local": "lerna run local",
+    "watch": "lerna run watch"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
