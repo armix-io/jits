@@ -21,4 +21,24 @@ test("absolute");
 
 test("relative");
 
-console.log(defaultParser.cache);
+test("text-unknown");
+
+test("text-transparent");
+
+test("text-white");
+
+test("text-red-500");
+
+test("text-[#fff]");
+
+test("bg-unknown");
+
+test("bg-transparent");
+
+test("bg-white");
+
+test("bg-red-500");
+
+test("bg-[#fff]");
+
+// console.log(defaultParser.cache);

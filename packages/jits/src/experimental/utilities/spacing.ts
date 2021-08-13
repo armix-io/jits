@@ -1,9 +1,4 @@
-export interface ScaleItem {
-  css: string;
-  px: number;
-}
-
-const scale = {
+export const spacing = {
   px: { css: "1px", px: 1 },
   "0": { css: "0px", px: 0 },
   "0.5": { css: "0.125rem", px: 2 },
@@ -40,5 +35,3 @@ const scale = {
   "80": { css: "20rem", px: 320 },
   "96": { css: "24rem", px: 38 },
 } as const;
-
-export default scale as Record<keyof typeof scale & string, ScaleItem>;
