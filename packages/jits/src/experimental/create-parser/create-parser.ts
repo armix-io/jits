@@ -1,4 +1,4 @@
-import { Style, Parser, Utility } from "../types";
+import { Style, Parser, Utility, UtilityArgs } from "../types";
 import { argsMatch } from "./args-match";
 import { argsPipe } from "./args-pipe";
 
@@ -41,14 +41,25 @@ export const createParser = (options: Options = {}): Parser => {
   const { utilities = [], onUnknown = "warn" } = options;
 
   // Split utilities into groups by number of arguments.
-  const argsUtilities = new Map<number, Utility[]>();
+  const argsUtilities = new Map<number, Map<Utility, UtilityArgs>>();
   for (const utility of utilities) {
-    const argsCount = utility.args.length;
+    // Unify utility args schema into
+    const argsSet = Array.isArray(utility.args)
+      ? new Set([utility.args])
+      : utility.args;
 
-    const prev = argsUtilities.get(argsCount) ?? [];
-    const next = [...prev, utility];
+    // Add utility to potentially many argsCount sets.
+    for (const args of argsSet.values()) {
+      const argsCount = args.length;
+      const argsCountSet = argsUtilities.get(argsCount) ?? new Map();
 
-    argsUtilities.set(argsCount, next);
+      // Enforce that utility must not have multiple args defs of same length.
+      if (argsCountSet.has(utility))
+        throw new TypeError("Utility cannot have multiple args of same size.");
+
+      argsCountSet.set(utility, args);
+      argsUtilities.set(argsCount, argsCountSet);
+    }
   }
 
   // Cache results from duplicate calls.
@@ -68,8 +79,8 @@ export const createParser = (options: Options = {}): Parser => {
       const utilities = argsUtilities.get(argsCount) ?? [];
 
       // Attempt to find a utility that matches input args.
-      for (const utility of utilities) {
-        const match = argsMatch(utility.args, args);
+      for (const [utility, utilityArgs] of utilities) {
+        const match = argsMatch(utilityArgs, args);
         // Skip, if utility does not match.
         if (!match) continue;
         // Otherwise, return result of matching utility.
@@ -77,7 +88,7 @@ export const createParser = (options: Options = {}): Parser => {
         // `build` can be a function, or static result object.
         const result =
           typeof build === "function"
-            ? build(argsPipe(utility.args, args))
+            ? build(argsPipe(utilityArgs, args))
             : build;
         // cache result
         cache.set(input, result);

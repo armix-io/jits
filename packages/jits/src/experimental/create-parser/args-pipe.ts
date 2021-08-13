@@ -1,4 +1,4 @@
-import { Utility } from "../types";
+import { UtilityArgs } from "../types";
 
 /**
  * Matches inner value of an arbitrary value string.
@@ -18,7 +18,7 @@ export const reArbitraryInnerValue = /^\[(\S*)\]$/;
  */
 
 export const argsPipe = (
-  utilityArgs: Utility["args"],
+  utilityArgs: UtilityArgs,
   inputArgs: string[]
 ): string[] => {
   const buildArgs = inputArgs.map((inputArg, argIndex) => {

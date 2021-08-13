@@ -1,4 +1,4 @@
-import { Utility } from "../types";
+import { UtilityArgs } from "../types";
 
 /**
  * Checks if inputArgs is compatible with utilityArgs.
@@ -8,7 +8,7 @@ import { Utility } from "../types";
  */
 
 export const argsMatch = (
-  utilityArgs: Utility["args"],
+  utilityArgs: UtilityArgs,
   inputArgs: string[]
 ): boolean => {
   // Ensure both args inputs are equal length.
