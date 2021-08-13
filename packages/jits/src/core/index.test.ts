@@ -1,9 +1,9 @@
-import parser from "./index";
+import { createParser } from "./index";
+import utilities from "./utilities";
+
+const parser = createParser({ utilities, onUnknown: "ignore" });
 
 test("core", () => {
-  const _onUnknown = parser.onUnknown;
-  parser.onUnknown = "ignore";
-
   const check = (input: string) =>
     expect(() => parser.parse(input)).not.toThrow();
 
@@ -25,6 +25,4 @@ test("core", () => {
   check("bg-[#fff]");
 
   expect(parser.cache.size).not.toBeFalsy();
-
-  parser.onUnknown = _onUnknown;
 });
