@@ -41,11 +41,14 @@ export const createParser = (options: Options = {}): Parser => {
     // Add utility to potentially many argsCount sets.
     for (const args of argsSet.values()) {
       const argsCount = args.length;
+      // Throw is argsCount is 0, i.e. empty args.
+      if (!argsCount) throw new TypeError("Cannot have empty args item.");
+
       const argsCountSet = argsUtilities.get(argsCount) ?? new Map();
 
       // Enforce that utility must not have multiple args defs of same length.
       if (argsCountSet.has(utility))
-        throw new TypeError("Utility cannot have multiple args of same size.");
+        throw new TypeError("Cannot have multiple args items of same size.");
 
       argsCountSet.set(utility, args);
       argsUtilities.set(argsCount, argsCountSet);
@@ -94,9 +97,9 @@ export const createParser = (options: Options = {}): Parser => {
         if (onUnknown === "ignore") {
           // Do nothing.
         } else if (onUnknown === "warn" || onUnknown === "error") {
-          console[onUnknown](`Unable to parse input "${input}".`);
+          console[onUnknown](`Unable to parse unknown input "${input}".`);
         } else if (onUnknown === "throw") {
-          throw new TypeError(`Unable to parse input "${input}".`);
+          throw new TypeError(`Unable to parse unknown input "${input}".`);
         } else {
           throw new TypeError(`Invalid "onUnknown" value "${onUnknown}".`);
         }
