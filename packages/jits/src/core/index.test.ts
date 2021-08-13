@@ -1,7 +1,11 @@
 import parser from "./index";
 
 test("core", () => {
-  const check = (input: string) => expect(parser.parse(input)).not.toThrow();
+  const _onUnknown = parser.onUnknown;
+  parser.onUnknown = "ignore";
+
+  const check = (input: string) =>
+    expect(() => parser.parse(input)).not.toThrow();
 
   check("unknown");
   check("hidden");
@@ -21,4 +25,6 @@ test("core", () => {
   check("bg-[#fff]");
 
   expect(parser.cache.size).not.toBeFalsy();
+
+  parser.onUnknown = _onUnknown;
 });

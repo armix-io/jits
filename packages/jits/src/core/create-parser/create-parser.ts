@@ -10,22 +10,12 @@ interface Options {
   utilities?: Utility[];
 
   /**
-   * Define behaviour when encountering an unknown input.
+   * See Parser.onUnknown.
    *
    * Defaults to "warn".
-   *
-   * If "warn", will output a message with `console.warn`.
-   * If "error", will output a message with `console.error`.
-   * If "throw", will throw a TypeError.
-   * If a function, accepts the failing input string, and may return `undefined`
-   * or a Style object.
    */
 
-  onUnknown?:
-    | "warn"
-    | "error"
-    | "throw"
-    | ((input: string) => Style | undefined);
+  onUnknown?: Parser["onUnknown"];
 }
 
 export type { Options as CreateParseOptions };
@@ -62,12 +52,12 @@ export const createParser = (options: Options = {}): Parser => {
     }
   }
 
-  // Cache results from duplicate calls.
-  const cache: Parser["cache"] = new Map();
-
   const parser: Parser = {
-    cache,
+    cache: new Map(),
+    onUnknown,
     parse(input) {
+      const { cache, onUnknown } = this;
+
       // Attempt to use cached result.
       if (cache.has(input)) return cache.get(input);
 
@@ -101,7 +91,9 @@ export const createParser = (options: Options = {}): Parser => {
 
       // Error handling for unhandled input.
       if (typeof onUnknown === "string") {
-        if (onUnknown === "warn" || onUnknown === "error") {
+        if (onUnknown === "ignore") {
+          // Do nothing.
+        } else if (onUnknown === "warn" || onUnknown === "error") {
           console[onUnknown](`Unable to parse input "${input}".`);
         } else if (onUnknown === "throw") {
           throw new TypeError(`Unable to parse input "${input}".`);
