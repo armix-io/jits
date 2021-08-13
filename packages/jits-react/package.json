@@ -1,7 +1,7 @@
 {
   "name": "@armix/jits-react",
-  "version": "0.0.0",
-  "author": "Armix <opensource@armix.io>",
+  "version": "1.0.0",
+  "author": "Armix <oss@armix.io>",
   "description": "React integration for @armix/jits.",
   "repository": "github:armix-io/jits",
   "license": "MIT",
