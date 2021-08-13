@@ -1,34 +1,55 @@
-export * from "./absolute-relative";
-export * from "./aspect";
-export * from "./bg";
-export * from "./border";
-export * from "./content";
-export * from "./flex";
-export * from "./font";
-export * from "./height-width";
-export * from "./hidden";
-export * from "./italic";
-export * from "./items";
-export * from "./justify";
-export * from "./leading";
-export * from "./ltr-rtl";
-export * from "./margin-padding";
-export * from "./opacity";
-export * from "./overflow";
-export * from "./overlay";
-export * from "./rounded";
-export * from "./self";
-export * from "./shadow";
-export * from "./text";
-export * from "./text-decoration";
-export * from "./text-transform";
-export * from "./tint";
-export * from "./top-right-bottom-left-inset";
-export * from "./tracking";
-export * from "./z";
+import { createUtility } from "../create-utility";
+import { colorMap, colorAliases, colorSets, colorUnits } from "./color";
+import { spacing } from "./spacing";
 
-export * from "./parse";
-export * from "./utility";
-export * from "./utility-schema";
+const position = createUtility({
+  args: [["absolute", "relative"]],
+  build: ([position]) => ({ position }),
+});
 
-export * from "./spacing-map";
+const hidden = createUtility({
+  args: ["hidden"],
+  build: { display: "hidden" },
+});
+
+const size = createUtility({
+  args: [
+    ["w", "h"],
+    [...Object.keys(spacing), "[]"],
+  ],
+  build: ([, s]) => ({
+    width: spacing[s as keyof typeof spacing]?.px ?? parseInt(s, 10),
+  }),
+});
+
+const color = createUtility({
+  args: new Set([
+    [
+      ["text", "bg"],
+      [...colorAliases, "[]"],
+    ],
+    [["text", "bg"], [...colorSets], [...colorUnits]],
+  ]),
+  build: ([operator, nameOrValue, scaleOrUndefined]) => {
+    const target = operator === "text" ? "color" : "backgroundColor";
+
+    const isAlias = colorAliases.includes(nameOrValue as any);
+    if (isAlias) {
+      return { [target]: colorMap[nameOrValue as typeof colorAliases[number]] };
+    }
+    const isSet =
+      colorSets.includes(nameOrValue as any) &&
+      colorUnits.includes(scaleOrUndefined as any);
+    if (isSet) {
+      return {
+        [target]:
+          colorMap[nameOrValue as typeof colorSets[number]][
+            scaleOrUndefined as typeof colorUnits[number]
+          ],
+      };
+    }
+    return { [target]: nameOrValue };
+  },
+});
+
+export default [position, hidden, size, color];
