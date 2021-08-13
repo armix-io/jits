@@ -1,6 +1,11 @@
 import { createUtility } from "../create-utility";
 import scale from "./scale";
 
+const position = createUtility({
+  args: [["absolute", "relative"]],
+  build: ([position]) => ({ position }),
+});
+
 const hidden = createUtility({
   args: ["hidden"],
   build: { display: "hidden" },
@@ -13,4 +18,4 @@ const w = createUtility({
   }),
 });
 
-export default [hidden, w];
+export default [position, hidden, w];

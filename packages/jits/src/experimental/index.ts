@@ -17,4 +17,8 @@ test("w-10");
 
 test("w-[100px]");
 
+test("absolute");
+
+test("relative");
+
 console.log(defaultParser.cache);
