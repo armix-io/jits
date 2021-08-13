@@ -30,6 +30,13 @@ interface Options {
 
 export type { Options as CreateParseOptions };
 
+/**
+ * Creates a new Parser object to parse inputs.
+ *
+ * @param options Options to configure Parser behaviour.
+ * @returns New Parser object.
+ */
+
 export const createParser = (options: Options = {}): Parser => {
   const { utilities = [], onUnknown = "warn" } = options;
 
