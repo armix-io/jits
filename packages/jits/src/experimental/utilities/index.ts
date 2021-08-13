@@ -1,4 +1,4 @@
-import { Utility } from "../utility";
+import { Utility } from "../types";
 import scale from "./scale";
 
 const hidden: Utility = {

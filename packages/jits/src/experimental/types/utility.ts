@@ -1,3 +1,9 @@
+import { Style } from "./style";
+
+/**
+ * Defines how to handle a parsed input of args to build an output Style object.
+ */
+
 export interface Utility {
   /**
    * Accepts an mixed array of strings and/or string arrays. String arrays will
@@ -24,7 +30,5 @@ export interface Utility {
    * @returns Style object, or `undefined` if something isn't compatible.
    */
 
-  build:
-    | ((args: string[]) => Record<string, any> | undefined)
-    | Record<string, any>;
+  build: ((args: string[]) => Style | undefined) | Style;
 }
