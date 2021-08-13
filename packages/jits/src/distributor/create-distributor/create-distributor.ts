@@ -1,62 +1,8 @@
 import { Style } from "../../core";
-import { Distributor, VariantType } from "../types";
-
-const variantsValidate = (
-  variants: string[],
-  variantTypes: Distributor["variantTypes"]
-): void => {
-  // Reference to stateVariant (if found), will conflict if more than one.
-  let stateVariant: string | undefined = undefined;
-
-  // Check all variants.
-  for (const variant of variants) {
-    // Throw, if variant is not defined as a variant type.
-    if (!Object.keys(variantTypes).includes(variant))
-      throw new TypeError(
-        `Unknown variant "${variant}".` +
-          ` Check for typo, or add "${variant}" to variantTypes.`
-      );
-    // Throw, if current variant is also a state variant, max one allowed.
-    if (variantTypes[variant] === VariantType.State && stateVariant)
-      throw new TypeError(
-        `State variant "${variant}" conflicts with "${stateVariant}".` +
-          ` No more than one state variant can be defined per input.`
-      );
-    // Set stateVariant if applicable, even if not enabled.
-    stateVariant = variant;
-  }
-};
-
-const variantsMatch = (
-  variants: string[],
-  environment: Record<string, boolean>
-): boolean => {
-  // If environment is empty, no variants can match.
-  if (!Object.keys(environment).length) return false;
-
-  // Check all variants if active in environment.
-  for (const variant of variants) {
-    // Fail, if environment value for variant is not truthy.
-    if (!environment[variant]) return false;
-  }
-
-  // Success, all variants in environment are truthy.
-  return true;
-};
-
-const variantsKey = (
-  variants: string[],
-  variantTypes: Distributor["variantTypes"]
-): string | undefined => {
-  // Check all variants if active in environment.
-  for (const variant of variants) {
-    // State variant found.
-    if (variantTypes[variant] === VariantType.State) return variant;
-  }
-
-  // No state variant.
-  return undefined;
-};
+import { Distributor } from "../types";
+import { variantsKey } from "./variants-key";
+import { variantsMatch } from "./variants-match";
+import { variantsValidate } from "./variants-validate";
 
 export const createDistributor = (
   parser: Distributor["parser"],
