@@ -9,7 +9,7 @@ const position = createUtility({
 
 const hidden = createUtility({
   args: ["hidden"],
-  build: { display: "hidden" },
+  build: { display: "none" },
 });
 
 const size = createUtility({
